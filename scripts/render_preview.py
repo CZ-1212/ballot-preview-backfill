@@ -13,94 +13,109 @@ import openpyxl
 
 ELECTION_TITLE = "November 3, 2026 General Election"
 
+# Color themes: primary (banners, headers) and accent (election title).
+THEMES = {
+    "default":   {"primary": "#1a3668", "accent": "#accf00"},
+    "mendocino": {"primary": "#1e7ec4", "accent": "#ff8c1a"},
+}
+COUNTY_THEMES = {
+    "Mendocino County": "mendocino",
+}
+
+def theme_css(county):
+    t = THEMES[COUNTY_THEMES.get(county, "default")]
+    h = t["primary"].lstrip("#")
+    rgb = ",".join(str(int(h[i:i+2], 16)) for i in (0, 2, 4))
+    return CSS.format(primary=t["primary"], accent=t["accent"], primary_rgb=rgb)
+
 CSS = """<style>
     /* Scoped widget CSS -- this entire block is extracted verbatim for CMS embeds. */
 
-    .lnm-results-widget, .lnm-results-widget * { box-sizing: border-box; margin: 0; padding: 0; }
-    .lnm-results-widget { font-family: Arial, sans-serif; }
+    .lnm-results-widget, .lnm-results-widget * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    .lnm-results-widget {{ font-family: Arial, sans-serif; }}
 
     /* County banner */
-    .lnm-results-widget .lnm-county-banner {
-      background-color: #1a3668;
+    .lnm-results-widget .lnm-county-banner {{
+      background-color: {primary};
       color: white;
       padding: 14px 18px;
       border-radius: 5px;
       margin-bottom: 12px;
       text-align: center;
-    }
-    .lnm-results-widget .lnm-county-name {
+    }}
+    .lnm-results-widget .lnm-county-name {{
       font-size: 22px;
       font-weight: 700;
       line-height: 1.2;
-    }
-    .lnm-results-widget .lnm-election-title {
+    }}
+    .lnm-results-widget .lnm-election-title {{
       font-size: 13px;
       font-weight: 400;
-      color: #accf00;
+      color: {accent};
       text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-top: 4px;
-    }
+    }}
 
 
     /* Race box */
-    .lnm-results-widget .race-box {
+    .lnm-results-widget .race-box {{
       background-color: white;
       border: 1px solid #ddd;
       border-radius: 5px;
       margin-bottom: 20px;
       overflow: hidden;
-    }
-    .lnm-results-widget .race-title {
-      background-color: #1a3668;
+    }}
+    .lnm-results-widget .race-title {{
+      background-color: {primary};
       color: white;
       padding: 10px 14px;
       font-weight: bold;
       font-size: 1em;
-    }
+    }}
 
     /* Ballot measure */
-    .lnm-results-widget .measure-block {
+    .lnm-results-widget .measure-block {{
       padding: 16px;
-    }
-    .lnm-results-widget .measure-name {
+    }}
+    .lnm-results-widget .measure-name {{
       font-size: 1.15em;
       font-weight: 700;
-      color: #1a3668;
+      color: {primary};
       margin-bottom: 6px;
-    }
-    .lnm-results-widget .measure-desc {
+    }}
+    .lnm-results-widget .measure-desc {{
       font-size: 0.88em;
       color: #555;
       line-height: 1.55;
-    }
+    }}
 
     /* Candidate table header */
-    .lnm-results-widget .candidate-table-head {
+    .lnm-results-widget .candidate-table-head {{
       padding: 6px 14px;
       border-top: 1px solid #ddd;
       background: #fafafa;
-    }
-    .lnm-results-widget .candidate-table-head span {
+    }}
+    .lnm-results-widget .candidate-table-head span {{
       font-size: 10px;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #999;
-    }
+    }}
 
     /* Candidate row */
-    .lnm-results-widget .candidate-row {
+    .lnm-results-widget .candidate-row {{
       border-top: 1px solid #eee;
       padding: 10px 14px;
-    }
-    .lnm-results-widget .candidate-name-cell {
+    }}
+    .lnm-results-widget .candidate-name-cell {{
       display: flex;
       align-items: center;
       gap: 8px;
       min-width: 0;
-    }
-    .lnm-results-widget .candidate-party {
+    }}
+    .lnm-results-widget .candidate-party {{
       width: 30px; height: 30px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
@@ -109,13 +124,13 @@ CSS = """<style>
       flex-shrink: 0;
       position: relative;
       cursor: default;
-    }
-    .lnm-results-widget .candidate-party::after {
+    }}
+    .lnm-results-widget .candidate-party::after {{
       content: attr(data-party);
       position: absolute;
       bottom: calc(100% + 5px);
       left: 0;
-      background: rgba(26,54,104,0.92);
+      background: rgba({primary_rgb},0.92);
       color: white;
       font-size: 11px;
       font-weight: 400;
@@ -126,36 +141,36 @@ CSS = """<style>
       opacity: 0;
       transition: opacity 0.15s ease;
       z-index: 20;
-    }
-    .lnm-results-widget .candidate-party:hover::after { opacity: 1; }
-    .lnm-results-widget .party-n { background: #e8e8e8; color: #555; }
-    .lnm-results-widget .candidate-name-text {
+    }}
+    .lnm-results-widget .candidate-party:hover::after {{ opacity: 1; }}
+    .lnm-results-widget .party-n {{ background: #e8e8e8; color: #555; }}
+    .lnm-results-widget .candidate-name-text {{
       display: flex;
       flex-direction: column;
       min-width: 0;
       flex: 1;
-    }
-    .lnm-results-widget .candidate-name {
+    }}
+    .lnm-results-widget .candidate-name {{
       font-weight: 700;
       font-size: 0.92em;
       color: #333;
       word-wrap: break-word;
       overflow-wrap: break-word;
-    }
-    .lnm-results-widget .candidate-profession {
+    }}
+    .lnm-results-widget .candidate-profession {{
       font-size: 0.78em;
       color: #666;
       margin-top: 2px;
       word-wrap: break-word;
       overflow-wrap: break-word;
-    }
+    }}
 
     /* Search */
-    .lnm-results-widget .search-wrap {
+    .lnm-results-widget .search-wrap {{
       margin-bottom: 16px;
       position: relative;
-    }
-    .lnm-results-widget .search-input {
+    }}
+    .lnm-results-widget .search-input {{
       width: 100%;
       padding: 10px 16px;
       font-size: 15px;
@@ -164,18 +179,18 @@ CSS = """<style>
       background: white;
       outline: none;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    }
-    .lnm-results-widget .search-input:focus {
-      border-color: #1a3668;
-      box-shadow: 0 0 0 2px rgba(26,54,104,0.15);
-    }
-    .lnm-results-widget .no-results {
+    }}
+    .lnm-results-widget .search-input:focus {{
+      border-color: {primary};
+      box-shadow: 0 0 0 2px rgba({primary_rgb},0.15);
+    }}
+    .lnm-results-widget .no-results {{
       display: none;
       text-align: center;
       color: #888;
       font-size: 14px;
       padding: 24px 0;
-    }
+    }}
   </style>
 """
 
@@ -263,7 +278,7 @@ def render_county(county, measures, candidates):
     races = collections.OrderedDict()
     for c in candidates:
         races.setdefault((c.get("Race") or "").strip(), []).append(c)
-    body = [CSS,
+    body = [theme_css(county),
             '<div class="lnm-results-widget">\n',
             '<div class="lnm-county-banner">\n',
             f'<div class="lnm-county-name">{esc(county)}</div>\n',
