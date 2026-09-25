@@ -42,18 +42,6 @@ CSS = """<style>
       margin-top: 4px;
     }
 
-    /* Provenance */
-    .lnm-results-widget .lnm-provenance {
-      font-size: 11px;
-      color: #888;
-      margin-bottom: 16px;
-      line-height: 1.6;
-    }
-    .lnm-results-widget .lnm-provenance a {
-      color: #1a3668;
-      text-decoration: none;
-    }
-    .lnm-results-widget .lnm-provenance a:hover { text-decoration: underline; }
 
     /* Race box */
     .lnm-results-widget .race-box {
@@ -243,20 +231,6 @@ def load(path):
         return out
     return rows("Measures"), rows("Candidates")
 
-def source_line(measures, candidates):
-    def first_url(rows):
-        for r in rows:
-            u = (r.get("Source URL") or "").strip()
-            if u:
-                return u.split(";")[0].strip()
-        return ""
-    cu, mu = first_url(candidates), first_url(measures)
-    if cu and mu and cu != mu:
-        return (f'Source: <a href="{esc(cu)}">County Registrar (candidates)</a> · '
-                f'<a href="{esc(mu)}">County Registrar (measures)</a>')
-    u = cu or mu
-    return f'Source: <a href="{esc(u)}">County Registrar of Voters</a>' if u else ""
-
 def render_measure(m):
     return (
         '<div class="race-box">\n'
@@ -299,9 +273,6 @@ def render_county(county, measures, candidates):
             '<input class="search-input" id="electionSearch" placeholder="Search for measures, candidates, contests…" type="text">\n',
             '</div>\n',
             '<div class="no-results" id="noResults">No results found.</div>\n']
-    src = source_line(measures, candidates)
-    if src:
-        body.append(f'<div class="lnm-provenance">{src}</div>\n')
     body += [render_measure(m) for m in measures]
     body += [render_race(r, cs) for r, cs in races.items()]
     body.append('</div>\n')
