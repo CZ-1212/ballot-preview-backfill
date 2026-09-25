@@ -1,0 +1,723 @@
+<style>
+    /* Scoped widget CSS -- this entire block is extracted verbatim for CMS embeds. */
+
+    .lnm-results-widget, .lnm-results-widget * { box-sizing: border-box; margin: 0; padding: 0; }
+    .lnm-results-widget { font-family: Arial, sans-serif; }
+
+    /* County banner */
+    .lnm-results-widget .lnm-county-banner {
+      background-color: #1a3668;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .lnm-results-widget .lnm-county-name {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .lnm-results-widget .lnm-election-title {
+      font-size: 13px;
+      font-weight: 400;
+      color: #accf00;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+
+    /* Race box */
+    .lnm-results-widget .race-box {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .lnm-results-widget .race-title {
+      background-color: #1a3668;
+      color: white;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-size: 1em;
+    }
+
+    /* Ballot measure */
+    .lnm-results-widget .measure-block {
+      padding: 16px;
+    }
+    .lnm-results-widget .measure-name {
+      font-size: 1.15em;
+      font-weight: 700;
+      color: #1a3668;
+      margin-bottom: 6px;
+    }
+    .lnm-results-widget .measure-desc {
+      font-size: 0.88em;
+      color: #555;
+      line-height: 1.55;
+    }
+
+    /* Candidate table header */
+    .lnm-results-widget .candidate-table-head {
+      padding: 6px 14px;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+    }
+    .lnm-results-widget .candidate-table-head span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    /* Candidate row */
+    .lnm-results-widget .candidate-row {
+      border-top: 1px solid #eee;
+      padding: 10px 14px;
+    }
+    .lnm-results-widget .candidate-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .lnm-results-widget .candidate-party {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      position: relative;
+      cursor: default;
+    }
+    .lnm-results-widget .candidate-party::after {
+      content: attr(data-party);
+      position: absolute;
+      bottom: calc(100% + 5px);
+      left: 0;
+      background: rgba(26,54,104,0.92);
+      color: white;
+      font-size: 11px;
+      font-weight: 400;
+      white-space: nowrap;
+      padding: 4px 9px;
+      border-radius: 4px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 20;
+    }
+    .lnm-results-widget .candidate-party:hover::after { opacity: 1; }
+    .lnm-results-widget .party-n { background: #e8e8e8; color: #555; }
+    .lnm-results-widget .candidate-name-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+    .lnm-results-widget .candidate-name {
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #333;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .lnm-results-widget .candidate-profession {
+      font-size: 0.78em;
+      color: #666;
+      margin-top: 2px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Search */
+    .lnm-results-widget .search-wrap {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .lnm-results-widget .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: white;
+      outline: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .lnm-results-widget .search-input:focus {
+      border-color: #1a3668;
+      box-shadow: 0 0 0 2px rgba(26,54,104,0.15);
+    }
+    .lnm-results-widget .no-results {
+      display: none;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      padding: 24px 0;
+    }
+  </style>
+<div class="lnm-results-widget">
+<div class="lnm-county-banner">
+<div class="lnm-county-name">City and County of San Francisco</div>
+<div class="lnm-election-title">November 3, 2026 General Election</div>
+</div>
+<div class="search-wrap">
+<input class="search-input" id="electionSearch" placeholder="Search for measures, candidates, contests…" type="text">
+</div>
+<div class="no-results" id="noResults">No results found.</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure A - Charter Changes Affecting Various City Departments and Commissions</div>
+<div class="measure-desc">Shall the City amend the Charter to align it with how some City departments currently operate, change some processes, eliminate or reorganize certain commissions and advisory bodies, and require the Board of Supervisors to amend voter-approved laws to enact some of these changes?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure B - Establishing a Municipal Finance Corporation and a Public Bank</div>
+<div class="measure-desc">Shall the City amend the Charter to authorize the City to establish a municipal finance corporation and a public bank?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure C - Contributions to the Housing Fund</div>
+<div class="measure-desc">Shall the City amend the Charter to change how the City’s annual contributions to the Housing Trust Fund are set, increase funding and expand programs for affordable housing, and extend the Fund to 2058?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure D - Changes to Ballot Measure Process</div>
+<div class="measure-desc">Shall the City amend the Charter to increase the requirements for signature initiatives from 2% to 8% of registered voters in San Francisco (currently from about 10,600 to about 42,500 signatures), increase the requirements for calling special elections, allow signature initiatives to be withdrawn before an election, and remove the ability of a minority of Board of Supervisors members or the Mayor to place measures on the ballot?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure E - City Administrator’s Authority and Changes to City Contracting</div>
+<div class="measure-desc">Shall the City amend the Charter to give the City Administrator more authority by centralizing the City’s purchasing rules and processes, changing how the City approves purchasing rules, changing when contracts and leases require Board of Supervisors approval, and extending the City Administrator’s term?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure F - Changes to Executive Branch Management</div>
+<div class="measure-desc">Shall the City amend the Charter to expand the Mayor’s authority to transfer responsibilities between departments, hire deputy mayors, and hire some and fire most department heads; and to allow City officials to remove members of boards and commissions without cause?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure G - Allowing Private Vehicles on the Great Highway in Sunset Dunes Park</div>
+<div class="measure-desc">Shall the City close Sunset Dunes Park from Monday at 4:00 a.m. through Friday at 6:00 p.m., unless a holiday falls on a weekday, in order to reopen the roadway known as the Upper Great Highway to private vehicles during that time?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure H - Parcel Tax to Fund Public Muni Operations</div>
+<div class="measure-desc">Shall the City fund Muni service through a new annual parcel tax on real estate at rates ranging from $129 per parcel up to a maximum of $400,000 per parcel, depending on the type of property and its size and adjusted annually for inflation, for estimated revenue of $177 million a year for 15 years?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure I - Changes to Real Property Transfer Tax</div>
+<div class="measure-desc">Shall the City permanently dedicate half of the transfer tax revenues collected when certain real estate with a value or sales price of more than $10,000,000 changes hands, which will continue to be taxed at rates of 5.5% to 6%, to be spent only on affordable housing, including social housing developments and housing assistance, and exempt certain sales from the dedicated portion of the tax, for an estimated annual revenue decrease of approximately $1 million?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City and County of San Francisco</div>
+<div class="measure-block">
+<div class="measure-name">Measure J - Removal of Foreclosure Exemption for Real Property Transfer Tax</div>
+<div class="measure-desc">Shall the City permanently apply a transfer tax of between 0.5% and 6% of a property’s fair market value, on the transfer of properties such as commercial, industrial, and large residential properties, that are transferred to a lender because of foreclosure or to avoid foreclosure, for estimated annual revenue of $100 million to $150 million?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Multicounty Jurisdiction</div>
+<div class="measure-block">
+<div class="measure-name">Measure RTM - Regional Transit Measure</div>
+<div class="measure-desc">Includes 5 Bay Area Counties: Alameda, Contra Costa, San Francisco, San Mateo, and Santa Clara. To prevent major service cuts to BART and other transit, avoid increased traffic, and reduce pollution by: Preserving BART, Caltrain, VTA, SamTrans, AC Transit, Muni, other transit for everyone, including workers, students, seniors, persons with disabilities; Supporting transit safety, cleanliness, affordability, reliability; Repairing targeted roads/potholes; Requiring financial transparency, oversight, accountability; shall the measure enacting a 0.5% (Alameda, Contra Costa, San Mateo, Santa Clara counties), and 1% (San Francisco) sales tax for 14 years generating approximately $980,000,000 annually, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Board of Supervisors, District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Nicholas Berg</div>
+<div class="candidate-profession">Property Management Executive</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Guy McCoy</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Monthanus Ratanapakdee</div>
+<div class="candidate-profession">Community Advocate / Mother</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Stephen Sherrill</div>
+<div class="candidate-profession">Appointed Member, Board of Supervisors</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Board of Supervisors, District 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Albert Chow</div>
+<div class="candidate-profession">Hardware Store Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jeremy Julian Greco</div>
+<div class="candidate-profession">Campus Coordinator / Monologist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alan Wong</div>
+<div class="candidate-profession">Appointed Member, Board of Supervisors</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Board of Supervisors, District 6</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alex Behrend</div>
+<div class="candidate-profession">Laborer / Community Organizer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Matt Dorsey</div>
+<div class="candidate-profession">San Francisco Supervisor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Board of Supervisors, District 8</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gary McCoy</div>
+<div class="candidate-profession">Healthcare Policy Advocate</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Michael T. Nguyen</div>
+<div class="candidate-profession">Attorney / Drag Producer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Darshini Patel</div>
+<div class="candidate-profession">Community Advocate</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Emanuel &quot;Manny&quot; Yekutiel</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Board of Supervisors, District 10</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Pearci &quot;PJ&quot; Bastiany III</div>
+<div class="candidate-profession">MPA Graduate Student</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dionjay (DJ) Brookter</div>
+<div class="candidate-profession">Community Organizer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Deandra Bryant</div>
+<div class="candidate-profession">Housing Advocate</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Theo Ellington</div>
+<div class="candidate-profession">Public Policy Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">J.R. Eppler</div>
+<div class="candidate-profession">Small Business Attorney</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ellsworth &quot;Ell&quot; M. Jennison, Jr.</div>
+<div class="candidate-profession">Union Carpenter</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mike Trouble Lin</div>
+<div class="candidate-profession">Small Business Consultant</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jamo Muhammad</div>
+<div class="candidate-profession">Father</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jessica Pessecow</div>
+<div class="candidate-profession">Nurse / Legal Representative</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Shawn M. Richard</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Assessor-Recorder</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Joaquin Torres</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Public Defender</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Manohar Raju</div>
+<div class="candidate-profession">Public Defender</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Board of Education</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Autumn Brown Garibay</div>
+<div class="candidate-profession">Public School Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Virginia Cheung</div>
+<div class="candidate-profession">Nonprofit Executive / Mother</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alida Fisher</div>
+<div class="candidate-profession">School Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ryan Hazelton</div>
+<div class="candidate-profession">Children&#x27;s Nonprofit Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Phil Kim</div>
+<div class="candidate-profession">School Board President</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Laurance Lee</div>
+<div class="candidate-profession">General Contractor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Reina Tello</div>
+<div class="candidate-profession">Community Organizer / Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tim Tung</div>
+<div class="candidate-profession">Public Finance Analyst</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Community College Board</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Elijah Ball</div>
+<div class="candidate-profession">College Campus Planner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rome Moses Jones</div>
+<div class="candidate-profession">Non-profit Executive</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Monroe Lace</div>
+<div class="candidate-profession">Public School Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Leah LaCroix</div>
+<div class="candidate-profession">Administrative Analyst</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jeremy Lee</div>
+<div class="candidate-profession">Asset Manager</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Bunny McFadden</div>
+<div class="candidate-profession">Nonprofit Manager / Writer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Erwin Tam</div>
+<div class="candidate-profession">Municipal Financial Advisor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lisa P Wynn II</div>
+<div class="candidate-profession">Health Equity Researcher</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Community College Board Partial Term</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ruth Ferguson</div>
+<div class="candidate-profession">Appointed Trustee, Community College</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">BART Board, District 8</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sara Barz</div>
+<div class="candidate-profession">Transportation Planning Manager</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    var input = document.getElementById('electionSearch');
+    var noResults = document.getElementById('noResults');
+    if (!input) return;
+    input.addEventListener('input', function() {
+      var q = this.value.trim().toLowerCase();
+      var container = input.closest('.lnm-results-widget') || document;
+      var boxes = container.querySelectorAll('.race-box');
+      var visible = 0;
+      boxes.forEach(function(box) {
+        var show = !q || box.textContent.toLowerCase().indexOf(q) !== -1;
+        box.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      noResults.style.display = (q && visible === 0) ? 'block' : 'none';
+    });
+  })();
+</script>

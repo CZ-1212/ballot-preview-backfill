@@ -1,0 +1,1253 @@
+<style>
+    /* Scoped widget CSS -- this entire block is extracted verbatim for CMS embeds. */
+
+    .lnm-results-widget, .lnm-results-widget * { box-sizing: border-box; margin: 0; padding: 0; }
+    .lnm-results-widget { font-family: Arial, sans-serif; }
+
+    /* County banner */
+    .lnm-results-widget .lnm-county-banner {
+      background-color: #1a3668;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .lnm-results-widget .lnm-county-name {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .lnm-results-widget .lnm-election-title {
+      font-size: 13px;
+      font-weight: 400;
+      color: #accf00;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+
+    /* Race box */
+    .lnm-results-widget .race-box {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .lnm-results-widget .race-title {
+      background-color: #1a3668;
+      color: white;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-size: 1em;
+    }
+
+    /* Ballot measure */
+    .lnm-results-widget .measure-block {
+      padding: 16px;
+    }
+    .lnm-results-widget .measure-name {
+      font-size: 1.15em;
+      font-weight: 700;
+      color: #1a3668;
+      margin-bottom: 6px;
+    }
+    .lnm-results-widget .measure-desc {
+      font-size: 0.88em;
+      color: #555;
+      line-height: 1.55;
+    }
+
+    /* Candidate table header */
+    .lnm-results-widget .candidate-table-head {
+      padding: 6px 14px;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+    }
+    .lnm-results-widget .candidate-table-head span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    /* Candidate row */
+    .lnm-results-widget .candidate-row {
+      border-top: 1px solid #eee;
+      padding: 10px 14px;
+    }
+    .lnm-results-widget .candidate-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .lnm-results-widget .candidate-party {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      position: relative;
+      cursor: default;
+    }
+    .lnm-results-widget .candidate-party::after {
+      content: attr(data-party);
+      position: absolute;
+      bottom: calc(100% + 5px);
+      left: 0;
+      background: rgba(26,54,104,0.92);
+      color: white;
+      font-size: 11px;
+      font-weight: 400;
+      white-space: nowrap;
+      padding: 4px 9px;
+      border-radius: 4px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 20;
+    }
+    .lnm-results-widget .candidate-party:hover::after { opacity: 1; }
+    .lnm-results-widget .party-n { background: #e8e8e8; color: #555; }
+    .lnm-results-widget .candidate-name-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+    .lnm-results-widget .candidate-name {
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #333;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .lnm-results-widget .candidate-profession {
+      font-size: 0.78em;
+      color: #666;
+      margin-top: 2px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Search */
+    .lnm-results-widget .search-wrap {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .lnm-results-widget .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: white;
+      outline: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .lnm-results-widget .search-input:focus {
+      border-color: #1a3668;
+      box-shadow: 0 0 0 2px rgba(26,54,104,0.15);
+    }
+    .lnm-results-widget .no-results {
+      display: none;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      padding: 24px 0;
+    }
+  </style>
+<div class="lnm-results-widget">
+<div class="lnm-county-banner">
+<div class="lnm-county-name">San Joaquin County</div>
+<div class="lnm-election-title">November 3, 2026 General Election</div>
+</div>
+<div class="search-wrap">
+<input class="search-input" id="electionSearch" placeholder="Search for measures, candidates, contests…" type="text">
+</div>
+<div class="no-results" id="noResults">No results found.</div>
+<div class="race-box">
+<div class="race-title">Galt Joint Union High School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure G</div>
+<div class="measure-desc">Galt Joint Union High School District, Repair/Safety and Vocational Training Measure. To upgrade classrooms to maintain quality education/school safety by preparing students for skilled trades including welding/construction/plumbing; repairing leaky roofs; removing asbestos/mold; shall Galt Joint Union High School District’s measure be adopted, authorizing $43,000,000 in bonds at legal rates, levying $30 per $100,000 of assessed valuation, generating $3,100,000 annually, while bonds are outstanding, prohibiting funds for administrators salaries/pensions, requiring independent citizens’ oversight, audits, all funds locally controlled?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lodi Unified School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure T</div>
+<div class="measure-desc">WITH NO ESTIMATED INCREASE IN CURRENT TAX RATES, shall Lodi Unified School District’s measure to repair leaky roofs, plumbing, deteriorating electrical, gas lines, heating, and air conditioning; improve school security; and upgrade career training and college preparation classrooms be adopted, authorizing $195 million of bonds with legal rates, average annual levies below $22 per $100,000 of assessed valuation ($11.4 million annually) while outstanding, annual audits, independent citizen oversight, full disclosure of all spending, and all funds locally controlled?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Escalon Unified School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure U</div>
+<div class="measure-desc">To provide safe, modern schools by upgrading/repairing aging classrooms, science labs, career technology and school facilities to support college/career readiness in math, science, technology, arts, engineering, and skilled trades; and fixing deteriorating roofs, plumbing, HVAC, and electrical systems; shall Escalon Unified School District’s measure authorizing $26,000,000 in bonds at legal rates be adopted, levying approximately $18 per $100,000 assessed value ($1,700,000 annually) while bonds are outstanding, with independent audits, citizen oversight and all money locally controlled?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lincoln Unified School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure V</div>
+<div class="measure-desc">Lincoln Unified School District Facilities and Safety Measure. To improve the quality of education; make safety/security improvements; provide classrooms and labs for job training and career readiness; replace roofs and HVAC systems; restrooms and facilities improvements; shall Lincoln Unified School District’s measure authorizing $79,000,000 of bonds be adopted at legal rates, estimated levies averaging $39.07 per $100,000 assessed value ($4,471,000 annually) while bonds are outstanding, with citizens’ oversight, audits, no money for salaries and funding only for LUSD schools?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Joaquin Delta CCD Trustee Area 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Charles R. Jennings</div>
+<div class="candidate-profession">Delta College Trustee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tony Shah</div>
+<div class="candidate-profession">Retired School Administrator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Yosemite CCD Trustee Area 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Don Davis</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">William Andrew Dunn</div>
+<div class="candidate-profession">Educational Consultant</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton USD Trustee Area 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alicia Hernandez</div>
+<div class="candidate-profession">Educator/College Student</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sam Carpenter</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Patrick Martin</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton USD Trustee Area 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Donald Donaire</div>
+<div class="candidate-profession">School Board Trustee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Malina Sanchez</div>
+<div class="candidate-profession">Student/Swim Teacher</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton USD Trustee Area 6</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sofia Colón</div>
+<div class="candidate-profession">Trustee/Healthcare Professional</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Christina Bacca Mcbrian</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton USD Trustee Area 7</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Padilla</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kennetha Stevens</div>
+<div class="candidate-profession">Trustee/Parent Educator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Manteca USD Trustee Area 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Marie Freitas</div>
+<div class="candidate-profession">Trustee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rupinder Singh Jagpal</div>
+<div class="candidate-profession">Professor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Veronica Salazar</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Manteca USD Trustee Area 6</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Stephen J. Schluer</div>
+<div class="candidate-profession">Trustee/Police Chief</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Barry Keith</div>
+<div class="candidate-profession">Retired Teacher</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Linden USD Trustee Area 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kyle Beadles</div>
+<div class="candidate-profession">Business Owner/Father</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jennifer Trotter</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lodi USD Trustee Area 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sherry Alexander</div>
+<div class="candidate-profession">School Board Trustee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Katherine King</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lodi USD Trustee Area 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ron Heberle</div>
+<div class="candidate-profession">Science Educator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jeff Stroh</div>
+<div class="candidate-profession">School Board Trustee</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lammersville USD Trustee Area 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Vanitha Daniel</div>
+<div class="candidate-profession">Mother/Educator/Entrepreneur</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Stephanie Olsen</div>
+<div class="candidate-profession">Education Attorney/Parent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Tracy USD Trustee Area 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Olinga Yarber-Alexander</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alicia R. Corrales</div>
+<div class="candidate-profession">Mother/Nonprofit Consultant</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Tracy USD Trustee Area 6</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">R. G. Fagin</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Devaughn Jones</div>
+<div class="candidate-profession">Clinical Pharmacist/Parent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Tracy USD Trustee Area 7</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Barbara &quot;Bobbie&quot; Etcheverry</div>
+<div class="candidate-profession">Communications Specialist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Vijay Pasapula</div>
+<div class="candidate-profession">Parent/Statistical Programmer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Jefferson ESD Trustee Area 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Larkin Fleckner</div>
+<div class="candidate-profession">Software Analyst/Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Todd Wetherell</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tamica Small</div>
+<div class="candidate-profession">Retired Law Enforcement</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Michele Padilla</div>
+<div class="candidate-profession">Stockton Councilmember/Educator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton City Council District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Michael Blower</div>
+<div class="candidate-profession">Councilmember/Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jessica Toccoli</div>
+<div class="candidate-profession">Educator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton City Council District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Brando Villapudua</div>
+<div class="candidate-profession">City Councilmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Desiree Lynch</div>
+<div class="candidate-profession">Post-Surgery Recovery Nurse</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Escalon City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Malinda Walker</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jason Perruquet</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jeremy Engle</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrew T. Hagan</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Manteca Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jacob Naven</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gary Singh</div>
+<div class="candidate-profession">Manteca Businessman/Mayor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Manteca City Council District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Breitenbucher</div>
+<div class="candidate-profession">Councilmember/Retired Firefighter</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lei Ann Varletta Larson</div>
+<div class="candidate-profession">Homemaker</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Manteca City Council District 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mike Morowit</div>
+<div class="candidate-profession">Manteca Businessman/Councilmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dani Bettencourt</div>
+<div class="candidate-profession">Businesswoman/Sales Coach</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rogger F. Gutierrez</div>
+<div class="candidate-profession">Parent/Management Analyst</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lodi City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Brandon Sywassink</div>
+<div class="candidate-profession">Farmer/Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Michael Carouba</div>
+<div class="candidate-profession">Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dawson Hayre</div>
+<div class="candidate-profession">Safety Supervisor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lodi City Council District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lisa Craig-Hensley</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jordan Duncan</div>
+<div class="candidate-profession">Father/Law Enforcement</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lodi City Council District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Deanne Barth</div>
+<div class="candidate-profession">Director of Finance</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Christopher S. Anderson</div>
+<div class="candidate-profession">Retired Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Cameron Bregman</div>
+<div class="candidate-profession">Businessman/Lodi Councilman</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Tracy Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mateo Bedolla</div>
+<div class="candidate-profession">Teacher/Tracy Councilmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dan Arriola</div>
+<div class="candidate-profession">Deputy District Attorney</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Uyiosa Felix Oviawe</div>
+<div class="candidate-profession">Maintenance Director/Contractor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Tracy City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jass Sangha</div>
+<div class="candidate-profession">Businesswoman/Mother</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robin Cole</div>
+<div class="candidate-profession">Project Manager</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Tracy City Council District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dan Evans</div>
+<div class="candidate-profession">Council Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ameni Alexander</div>
+<div class="candidate-profession">Nonprofit Organization CFO</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ametrius V. Sidney</div>
+<div class="candidate-profession">Public Safety Executive</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Ripon City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Michael Restuccia</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dean D. Uecker</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Frank L. Madrigal</div>
+<div class="candidate-profession">Compliance Consultant</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lathrop Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Paul Akinjo</div>
+<div class="candidate-profession">City of Lathrop Mayor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Minnie &quot;Cotton&quot; Diallo</div>
+<div class="candidate-profession">City of Lathrop Councilwoman</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Lathrop City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Steve Dresser</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Leandro Vicuña</div>
+<div class="candidate-profession">Bank Executive/Father</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Daniel Macneilage</div>
+<div class="candidate-profession">Construction Superintendent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Shelita Jefferson</div>
+<div class="candidate-profession">Realtor/Mother</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Mountain House City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ronna Green</div>
+<div class="candidate-profession">City of Mountain House Council Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Happy Grewal</div>
+<div class="candidate-profession">Business Owner/Farmer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Bernice King Tingle</div>
+<div class="candidate-profession">City of Mountain House Council Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Nader Shareghi</div>
+<div class="candidate-profession">Engineer/Assistant Manager</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Arjun Juturu</div>
+<div class="candidate-profession">Engineer/Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Suresh Vuyyuru</div>
+<div class="candidate-profession">Parent/Engineer/Farmer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">South San Joaquin Irrigation District, Division 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Glenn Spyksma</div>
+<div class="candidate-profession">SSJID Board Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mike Sonke</div>
+<div class="candidate-profession">Farmer/Business Owner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton East Water District, Division 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrew Watkins</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Matt Gandolfo</div>
+<div class="candidate-profession">Farmer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton East Water District, Division 3 Unexpired</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ryan G. Hansen</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Wayne S. Watanabe</div>
+<div class="candidate-profession">Farmer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Stockton East Water District, Division 7</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Thomas Mcgurk</div>
+<div class="candidate-profession">Farmer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mary Elizabeth</div>
+<div class="candidate-profession">Scientist/R.E.H.S.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    var input = document.getElementById('electionSearch');
+    var noResults = document.getElementById('noResults');
+    if (!input) return;
+    input.addEventListener('input', function() {
+      var q = this.value.trim().toLowerCase();
+      var container = input.closest('.lnm-results-widget') || document;
+      var boxes = container.querySelectorAll('.race-box');
+      var visible = 0;
+      boxes.forEach(function(box) {
+        var show = !q || box.textContent.toLowerCase().indexOf(q) !== -1;
+        box.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      noResults.style.display = (q && visible === 0) ? 'block' : 'none';
+    });
+  })();
+</script>

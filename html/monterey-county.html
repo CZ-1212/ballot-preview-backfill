@@ -1,0 +1,2309 @@
+<style>
+    /* Scoped widget CSS -- this entire block is extracted verbatim for CMS embeds. */
+
+    .lnm-results-widget, .lnm-results-widget * { box-sizing: border-box; margin: 0; padding: 0; }
+    .lnm-results-widget { font-family: Arial, sans-serif; }
+
+    /* County banner */
+    .lnm-results-widget .lnm-county-banner {
+      background-color: #1a3668;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .lnm-results-widget .lnm-county-name {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .lnm-results-widget .lnm-election-title {
+      font-size: 13px;
+      font-weight: 400;
+      color: #accf00;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+
+    /* Race box */
+    .lnm-results-widget .race-box {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .lnm-results-widget .race-title {
+      background-color: #1a3668;
+      color: white;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-size: 1em;
+    }
+
+    /* Ballot measure */
+    .lnm-results-widget .measure-block {
+      padding: 16px;
+    }
+    .lnm-results-widget .measure-name {
+      font-size: 1.15em;
+      font-weight: 700;
+      color: #1a3668;
+      margin-bottom: 6px;
+    }
+    .lnm-results-widget .measure-desc {
+      font-size: 0.88em;
+      color: #555;
+      line-height: 1.55;
+    }
+
+    /* Candidate table header */
+    .lnm-results-widget .candidate-table-head {
+      padding: 6px 14px;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+    }
+    .lnm-results-widget .candidate-table-head span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    /* Candidate row */
+    .lnm-results-widget .candidate-row {
+      border-top: 1px solid #eee;
+      padding: 10px 14px;
+    }
+    .lnm-results-widget .candidate-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .lnm-results-widget .candidate-party {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      position: relative;
+      cursor: default;
+    }
+    .lnm-results-widget .candidate-party::after {
+      content: attr(data-party);
+      position: absolute;
+      bottom: calc(100% + 5px);
+      left: 0;
+      background: rgba(26,54,104,0.92);
+      color: white;
+      font-size: 11px;
+      font-weight: 400;
+      white-space: nowrap;
+      padding: 4px 9px;
+      border-radius: 4px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 20;
+    }
+    .lnm-results-widget .candidate-party:hover::after { opacity: 1; }
+    .lnm-results-widget .party-n { background: #e8e8e8; color: #555; }
+    .lnm-results-widget .candidate-name-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+    .lnm-results-widget .candidate-name {
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #333;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .lnm-results-widget .candidate-profession {
+      font-size: 0.78em;
+      color: #666;
+      margin-top: 2px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Search */
+    .lnm-results-widget .search-wrap {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .lnm-results-widget .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: white;
+      outline: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .lnm-results-widget .search-input:focus {
+      border-color: #1a3668;
+      box-shadow: 0 0 0 2px rgba(26,54,104,0.15);
+    }
+    .lnm-results-widget .no-results {
+      display: none;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      padding: 24px 0;
+    }
+  </style>
+<div class="lnm-results-widget">
+<div class="lnm-county-banner">
+<div class="lnm-county-name">Monterey County</div>
+<div class="lnm-election-title">November 3, 2026 General Election</div>
+</div>
+<div class="search-wrap">
+<input class="search-input" id="electionSearch" placeholder="Search for measures, candidates, contests…" type="text">
+</div>
+<div class="no-results" id="noResults">No results found.</div>
+<div class="race-box">
+<div class="race-title">Carmel Unified School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure I</div>
+<div class="measure-desc">55% Voter Approval Required
+To update local schools, replace aging roofs, failing heating, cooling, ventilation, plumbing, electrical and sewer with efficient systems; improve student/ school safety; repair/ replace old buildings and aging portables with permanent classrooms; update classrooms/playgrounds; improve disability access; shall Carmel Unified School District&#x27;s measure be adopted, authorizing $250,000,000 in bonds at legal rates, levying $36 per $100,000 of assessed value, averaging $17,700,000 annually while bonds are outstanding, with independent oversight/ audits, no money for salaries, exclusively for CUSD?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">North Monterey County Unified School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure L</div>
+<div class="measure-desc">55% Voter Approval Required
+To repair and upgrade older schools to meet current health/safety codes; remove asbestos/lead pipes; fix deteriorating roofs, plumbing, dry rot, HVAC and electrical systems; improve school safety/security; and upgrade aging classrooms including science, technology, and skilled trades facilities; shall North Monterey County Unified School District’s measure authorizing $40,000,000 in bonds at legal rates be adopted, levying $32 per $100,000 assessed value ($2,800,000 annually) while bonds are outstanding, with citizen oversight, independent audits and all money locally controlled?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Pacific Grove Unified School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure K</div>
+<div class="measure-desc">2/3 Voter Approval Required
+With funds that cannot be taken by State or Federal government officials and spent elsewhere, shall Pacific Grove Unified School District&#x27;s parcel tax measure enhancing reading and math programs; improving services for students with disabilities; keeping before- and after-school programs affordable; and supporting student mental health counseling at Forest Grove Elementary School, Robert Down Elementary School, Pacific Grove Middle School, Pacific Grove Adult Education Center, Pacific Grove Community High School and Pacific Grove High School be adopted at $85 per parcel for five years (raising approximately $800,000 annually), no administrator salaries, pensions or benefits, and full disclosure of spending?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Paso Robles Joint Unified School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure G-26</div>
+<div class="measure-desc">55% Voter Approval Required
+With funds that cannot be taken by the State and spent elsewhere, shall Paso Robles Joint Unified School District&#x27;s measure to renovate and expand classrooms and career training facilities; and repair leaky roofs and inefficient heating and air-conditioning be adopted authorizing $205 million of bonds with legal rates, average levies below $50 per $100,000 of assessed value (raising $12.2 million annually) while outstanding, audits, taxpayer oversight, no funds for administrator salaries, pensions or benefits, and full disclosure of all spending?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">South Monterey County Joint Union High School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure J</div>
+<div class="measure-desc">Majority Voter Approval Required
+Measure for the Reorganization of School Districts.
+Shall South Monterey County Joint Union High School District (SMCJUHSD) be reorganized to form a new unified school district covering the territory of Greenfield Union School District to be known as Greenfield Unified School District, and a second unified school district covering the rest of the territory of SMCJUHSD to be known as King City Joint Unified School District, resulting in the dissolution of Greenfield Union School District, King City Union School District, and SMCJUHSD?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">COUNTY OF MONTEREY</div>
+<div class="measure-block">
+<div class="measure-name">Measure E</div>
+<div class="measure-desc">Majority Voter Approval Required
+To fund critical County of Monterey services, including programs to improve street, water and sewer infrastructure maintenance; repair potholes; enhance emergency services; update libraries, parks and recreation facilities; improve healthcare and job development programs; and reduce homelessness, shall the County of Monterey increase its existing Transient Occupancy Tax paid only by hotel/lodging guests in the unincorporated area from 10.5% to 12.5% providing approximately $7,600,000 annually to be spent locally, until ended by voters?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Carmel-By-The-Sea</div>
+<div class="measure-block">
+<div class="measure-name">Measure N</div>
+<div class="measure-desc">Majority Voter Approval Required
+To upgrade streets/sidewalks, address beach erosion, enhance wildfire preparedness, maintain City trees, and fund other general government purposes in City of Carmel-by-the-Sea, shall the measure increasing the transactions and use tax (also known as sales tax) by 0.375%, from 1.50% to 1.875%, providing approximately $1,800,000 annually in additional revenue and approximately $9,400,000 annually in total revenue, and extending the total 1.875% tax until ended by voters, with independent audits and all funds benefitting Carmel-by-the-Sea, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Carmel-By-The-Sea</div>
+<div class="measure-block">
+<div class="measure-name">Measure M</div>
+<div class="measure-desc">Majority Voter Approval Required
+To upgrade streets/sidewalks, address beach erosion, enhance wildfire preparedness, maintain City trees, and fund other general government purposes in City of Carmel-by-the-Sea, shall the measure establishing a new 2% transient occupancy tax, paid by lodging guests, in addition to the existing 10% transient occupancy tax, increasing the total tax rate to 12%, with the new 2% tax generating approximately $1,900,000 annually, and the total 12% tax generating $11,700,000 annually, until ended by voters, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Greenfield</div>
+<div class="measure-block">
+<div class="measure-name">Measure O</div>
+<div class="measure-desc">Majority Voter Approval Required
+Shall the Measure Continuing the City of Greenfield Transactions and Use Tax Measure be Adopted? To continue to enhance the health, safety and welfare of Greenfield, through strengthened public safety; increased youth recreation programs; continuance of code enforcement services; and other essential services, shall the City of Greenfield re-enact a voter approved 0.75 percent sales tax, subject to annual audits, and review by a City established oversight committee, raising $1.4 million annually and expiring on March 31, 2033?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of King</div>
+<div class="measure-block">
+<div class="measure-name">Measure P</div>
+<div class="measure-desc">Majority Voter Approval Required
+King City Public Safety, Local Services Measure. Shall the measure continuing King City’s locally controlled funding for general city services, such as maintaining 911 fire, medical, police response, gang/violent crime prevention/investigation, and King City’s financial stability; providing firefighter protective clothing/ breathing equipment; repairing streets/ potholes, by reauthorizing its sales tax at a rate of 1.5¢, providing approximately $3,600,000 annually until ended by voters; requiring audits, public disclosure, citizens’ oversight, all funds benefit King City residents, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Marina</div>
+<div class="measure-block">
+<div class="measure-name">Measure Q</div>
+<div class="measure-desc">Majority Voter Approval Required
+MARINA 911 EMERGENCY, PUBLIC SAFETY, AND COMMUNITY SERVICES MEASURE. To ensure firefighters, EMTs, police officers, emergency operations, response to emergencies and natural disasters including earthquakes; repair and upgrade police/fire/city buildings; protect water supply; repair streets/potholes; and provide general city services, shall the City of Marina&#x27;s measure establishing a 7% utility users&#x27; tax with low-income rates, generating approximately $3,830,000 annually until ended by voters, requiring spending disclosures, audits, all funds spent locally, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Monterey</div>
+<div class="measure-block">
+<div class="measure-name">Measure S</div>
+<div class="measure-desc">2/3 Voter Approval Required
+CONTINUATION OF STREET INFRASTRUCTURE REHABILITATION TAX. Without increasing tax rates, shall the City of Monterey measure to fix streets, potholes, and sidewalks, repair storm drains to keep beaches/Monterey Bay clean, improve street safety and access for senior citizens, disabled residents, and others by renewing the existing one-cent per dollar sales tax for 8 years, providing $12 million annually, requiring public disclosure of funds/independent audits, and all funds spent locally, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacific Grove</div>
+<div class="measure-block">
+<div class="measure-name">Measure R</div>
+<div class="measure-desc">Majority Voter Approval Required
+Preserving General Services Measure. Shall the measure, to provide funding for the City of Pacific Grove services, such as keeping streets, sidewalks, beaches, parks, playgrounds and public facilities safe, clean, and well-maintained; repairing/replacing aging infrastructure; fixing potholes and streets; and providing fire protection, paramedic, crime prevention, and 9-1-1 response by establishing a 0.375% transactions and use (&quot;sales&quot;) tax, providing approximately $1,000,000 annually for 10 years, with independent audits, and all money locally controlled, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Salinas</div>
+<div class="measure-block">
+<div class="measure-name">Measure H</div>
+<div class="measure-desc">Majority Voter Approval Required
+Shall Ordinance No. 2687, which repeals the Residential Rental Registration Ordinance, the Rent Stabilization Ordinance, the Tenant Protection and Just Cause Eviction Ordinance, and the Tenant Anti-Harassment Ordinance, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Salinas</div>
+<div class="measure-block">
+<div class="measure-name">Measure G</div>
+<div class="measure-desc">Majority Voter Approval Required
+Without raising taxes, shall the City of Salinas renew Measure G maintaining the existing 1¢ local sales tax providing approximately $30,000,000 annually until ended by the voters to continue funding street and sidewalk repairs and other long-term infrastructure projects, parks, youth and senior programs, police, fire, and emergency response, homeless reduction, and other general city services, with independent citizen oversight, annual audits, and all funds dedicated to and remaining in Salinas?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">North County Public Recreation District</div>
+<div class="measure-block">
+<div class="measure-name">Measure V</div>
+<div class="measure-desc">2/3 Voter Approval Required
+Shall the measure to expand the community senior center; provide clean, safe parks; enhance recreational programs for youth and seniors; ensure disability accessibility; maintain park restrooms; and retain staff to operate facilities at North County Recreation and Park District, by levying $82.00 annually per parcel, raising approximately $300,000.00 per year until ended by voters, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Community Facilities District No. 2 (Road Quality) of the Santa Lucia Community Services District</div>
+<div class="measure-block">
+<div class="measure-name">Measure T</div>
+<div class="measure-desc">2/3 Voter Approval Required
+Shall a special tax to maintain and operate Santa Lucia’s roads (including necessary resurfacing, rehabilitation, preventative treatments, and similar work) be levied annually for 15 years at an initial rate of $2,968 per year for developed and undeveloped estate residential parcels with rates for other parcels shown in Resolution No. 26-08, with all rates subject to a 2% annual inflation adjustment, initially generating approximately $999,736 and shall Community Facilities District No. 2 (Road Quality) of the Santa Lucia Community Services District have an appropriations limit of $1,350,000?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Soledad-Mission Recreation District</div>
+<div class="measure-block">
+<div class="measure-name">Measure U</div>
+<div class="measure-desc">2/3 Voter Approval Required
+Soledad-Mission Recreation District (Soledad Rec) Affordable Recreation Measure. To maintain park/ recreation programs, such as: helping keep recreation programs affordable; improving accessibility of services/ facilities for people with disabilities; maintaining recreation/ swim programs for all ages; and supporting toddler programs like T-Ball, soccer, tumbling/ day camp; shall the Soledad-Mission Recreation District’s measure, levying a tax of 3.5¢ per building square foot, until ended by voters, with annual adjustments, and independent citizens’ oversight, providing approximately $292,000 annually, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Monterey County Board of Education Governing Board Member Trustee Area 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Megan Whilden</div>
+<div class="candidate-profession">Retired Executive Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rita Patel</div>
+<div class="candidate-profession">Governing Board Member, Carmel Unified School District</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Monterey County Board of Education Governing Board Member Trustee Area 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Heather Owen</div>
+<div class="candidate-profession">Governing Board Member, Monterey County Board of Education</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rick Diaz Jr</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Monterey County Board of Education Governing Board Member Trustee Area 7</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robert Ocampo</div>
+<div class="candidate-profession">Retired School Counselor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Shanice Virrueta</div>
+<div class="candidate-profession">Nonprofit Director/Mother</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Hartnell Community College District Governing Board Member Trustee Area 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Felicia Perez Kausin</div>
+<div class="candidate-profession">Sponsorship Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Patricia Coyt</div>
+<div class="candidate-profession">Community Volunteer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Hartnell Community College District Governing Board Member Trustee Area 6</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rosalie C. Sanchez</div>
+<div class="candidate-profession">Retired School Clerk</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sofia Ramirez</div>
+<div class="candidate-profession">Parent/Executive Assistant</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Hartnell Community College District Governing Board Member Trustee Area 7</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">John Huerta Jr</div>
+<div class="candidate-profession">Farmworker Consultant</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Nancy Reyes</div>
+<div class="candidate-profession">Elementary School Secretary</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Monterey Peninsula Community College District Governing Board Member Trustee Area 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ben Strickland</div>
+<div class="candidate-profession">Security Officer/Entrepreneur</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rosalyn Green</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Carmel Unified School District Governing Board Member Trustee Area 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Art Fernandez</div>
+<div class="candidate-profession">Product Engineering Consultant</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Karey Shaffer</div>
+<div class="candidate-profession">Parent/Program Manager</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Gonzales Unified School District Governing Board Member Trustee Area 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Erin Askew</div>
+<div class="candidate-profession">Finance Manager/Coach</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Joe Sanchez</div>
+<div class="candidate-profession">Retired Custodian</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Marvelia Valdez</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Gonzales Unified School District Governing Board Member Trustee Area 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gerardo Villegas</div>
+<div class="candidate-profession">Chief Business Officer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Maria D. Cuevas</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Gonzales Unified School District Governing Board Member Trustee Area 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Abraham Flores Avila</div>
+<div class="candidate-profession">Head Custodian</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rubycela Valdez</div>
+<div class="candidate-profession">Instructor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">North Monterey County Unified School District Governing Board Member Trustee Area 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Adriana Melgoza Ramirez</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Catalina Torres</div>
+<div class="candidate-profession">Case Manager</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rudy J Diaz</div>
+<div class="candidate-profession">Parent/Coach</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">North Monterey County Unified School District Governing Board Member Trustee Area 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Adrian Ayala Alvarez</div>
+<div class="candidate-profession">Production Engineer/Father</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Eric Stover</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jarrett Garife</div>
+<div class="candidate-profession">Student Transportation Manager</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Pacific Grove Unified School District Governing Board Member Trustee Area 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Charles &quot;Chuck&quot; Brinker</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dan Miller</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Stephen Bennett</div>
+<div class="candidate-profession">Parent/Systems Technician</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Shandon Joint Unified School District Governing Board Member Trustee Area 2, 4 Year</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jennifer Moe</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jesse Cuellar</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Maria Elena Garcia</div>
+<div class="candidate-profession">Pharmacy Technician</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Meagan Erroa</div>
+<div class="candidate-profession">Preschool Teacher</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Salinas Union High School District Governing Board Member Trustee Area 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Brenda Contreras</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Nathalia Carrillo</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Salinas Union High School District Governing Board Member Trustee Area 7</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrew Rausch</div>
+<div class="candidate-profession">Pastor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Elizabeth Lopez</div>
+<div class="candidate-profession">School District Administrator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Merissa Dacpano</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sara Young</div>
+<div class="candidate-profession">Parent/Board Member</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">South Monterey County Joint Union High School District Governing Board Member</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Leslie Girard</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Miguel R. Lomeli</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Paul Dake</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sonia Valerio Quiroz</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Alisal Union School District Governing Board Member Trustee Area 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sandra V. Ocampo</div>
+<div class="candidate-profession">Governing Board Member, MCBOE</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ulises Gonzalez Reyes</div>
+<div class="candidate-profession">Nonprofit Associate Director</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Alisal Union School District Governing Board Member Trustee Area 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Oscar Ramos</div>
+<div class="candidate-profession">Educator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rocky V Reyes</div>
+<div class="candidate-profession">Educator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Alisal Union School District Governing Board Member Trustee Area 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Aurelia Alvarez-Silva</div>
+<div class="candidate-profession">Parent/Receptionist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jesús R. Velásquez</div>
+<div class="candidate-profession">Retired Educator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Maria M. Jimenez</div>
+<div class="candidate-profession">Journalist/Business Owner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Greenfield Unified School District Governing Board Member</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Kong</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Denise Jaime</div>
+<div class="candidate-profession">Program Coordinator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gabriela Mora</div>
+<div class="candidate-profession">Mother</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jose Madrid</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Josefina Silva</div>
+<div class="candidate-profession">Retired Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Juergen B. Smith</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lorena Chavez</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lucila Ayala</div>
+<div class="candidate-profession">Plans Examiner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Paul Dake</div>
+<div class="candidate-profession">Retired Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sonia Heredia</div>
+<div class="candidate-profession">Educator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Greenfield Union School District Governing Board Member Trustee Area 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Kong</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Josefina Silva</div>
+<div class="candidate-profession">Retired Teacher</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Greenfield Union School District Governing Board Member Trustee Area 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Juergen B. Smith</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lucila Ayala</div>
+<div class="candidate-profession">Plans Examiner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Greenfield Union School District Governing Board Member Trustee Area 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Denise Jaime</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gabriela Mora</div>
+<div class="candidate-profession">Mother</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">King City Joint Unified School District Governing Board Member</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Gaboni</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Franky Lopez Jr</div>
+<div class="candidate-profession">Parent/Commercial Producer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Leslie Girard</div>
+<div class="candidate-profession">Retired Library Technician</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Linda Benway</div>
+<div class="candidate-profession">Retired Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Miguel Lomeli</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mindy Hunt</div>
+<div class="candidate-profession">Business Services Analyst</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Monique D Ross</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sonia Valerio Quiroz</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Susan E King</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Yesenia Zavala</div>
+<div class="candidate-profession">Social Worker</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">King City Union School District Governing Board Member</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Franky Lopez Jr</div>
+<div class="candidate-profession">Parent/Commercial Broker</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Monique D Ross</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sonia Valerio Quiroz</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Susan E King</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Yesenia Zavala</div>
+<div class="candidate-profession">Social Worker</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Ardo Union Elementary School District Governing Board Member</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">J Felix Sanchez Jr</div>
+<div class="candidate-profession">Rig Operator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kaeda K. Barrios</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Nayeli Camacho</div>
+<div class="candidate-profession">Secretary</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tiffini Josette Moore</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Lucas Union Elementary School District Governing Board Member, 2 Year</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Esmeralda Wittmann</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Nereida Marisol Gonzalez</div>
+<div class="candidate-profession">Patient Caregiver</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Washington Union Elementary School District Governing Board Member</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Amanda Belli</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrea Massey</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jennifer D. Morris</div>
+<div class="candidate-profession">Governing Board Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robert Long</div>
+<div class="candidate-profession">Parent/Agricultural Executive</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Stuart L Belli</div>
+<div class="candidate-profession">Retired College Professor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Carmel-By-The-Sea Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Boland</div>
+<div class="candidate-profession">Banking Executive</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Hans Buder</div>
+<div class="candidate-profession">Carmel City Councilmember</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Carmel-By-The-Sea Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alissandra Dramov</div>
+<div class="candidate-profession">City Council Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Bobby Richards</div>
+<div class="candidate-profession">Driving Instructor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Stefan Karapetkov</div>
+<div class="candidate-profession">Planning Commissioner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Del Rey Oaks Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Scott Donaldson</div>
+<div class="candidate-profession">Mayor of Del Rey Oaks</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Del Rey Oaks Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Cheryl Parker</div>
+<div class="candidate-profession">Civil Engineer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jeremy Hallock</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Shelley Cabanillas</div>
+<div class="candidate-profession">Community Volunteer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Gonzales Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrew Castillo</div>
+<div class="candidate-profession">Disability Advocate</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Elizabeth Silva</div>
+<div class="candidate-profession">Mayor Pro Tem</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Henry Laizure McDowell</div>
+<div class="candidate-profession">Property Manager</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Gonzales Member, City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Delia Gutierrez</div>
+<div class="candidate-profession">Retired County Employee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Maria Orozco</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Gonzales Member, City Council District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Adrian Paco</div>
+<div class="candidate-profession">Business Development Director</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Gonzales Member, City Council District 4, 2 Year</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Constance &quot;Connie&quot; Arellano</div>
+<div class="candidate-profession">Emergency 911 Dispatcher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Henry Martinez Sr</div>
+<div class="candidate-profession">Landlord</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Greenfield Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robert &quot;Bob&quot; White</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Greenfield Member, City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Belen Garcia</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Greenfield Member, City Council District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David H. Godoy</div>
+<div class="candidate-profession">Maintenance Supervisor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rachel M. Ortiz</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of King Member, City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jonas Lalehzadeh</div>
+<div class="candidate-profession">Farmer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of King Member, City Council District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mike LeBarre</div>
+<div class="candidate-profession">Agricultural Technician</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Marina Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ana Luz Acevedo-Cabrera</div>
+<div class="candidate-profession">Professor/Nonprofit Boardmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Elisabeth &quot;Liesbeth&quot; Visscher</div>
+<div class="candidate-profession">Mayor Pro Tem</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mike Moeller</div>
+<div class="candidate-profession">Respiratory Care Practitioner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Marina Member, City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Brian McCarthy</div>
+<div class="candidate-profession">City of Marina Councilmember</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Marina Member, City Council District 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Athena Rita Burciaga</div>
+<div class="candidate-profession">Student/Community Volunteer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Brad Imamura</div>
+<div class="candidate-profession">Director, Marina Coast Water District</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mike Simmons</div>
+<div class="candidate-profession">Planning Commissioner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Monterey Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tyller Williamson</div>
+<div class="candidate-profession">Monterey Mayor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Vince Malfitano</div>
+<div class="candidate-profession">Retired Business Owner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Monterey Member, City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kim Barber</div>
+<div class="candidate-profession">Monterey City Councilmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tom Reeves</div>
+<div class="candidate-profession">Retired City of Monterey Engineer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Monterey Member, City Council District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alec M Manas</div>
+<div class="candidate-profession">Housing Project Manager</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jeff Whitmoyer</div>
+<div class="candidate-profession">Fiduciary Investment Manager</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Vicki Nohrden</div>
+<div class="candidate-profession">Nonprofit Director</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacific Grove Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Luke Coletti</div>
+<div class="candidate-profession">Public Policy Advocate</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Nick Smith</div>
+<div class="candidate-profession">Mayor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacific Grove Member, City Council, 2 Year</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">James Orlando Ogle III</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lori McDonnell</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacific Grove Member, City Council District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Cynthia Garfield</div>
+<div class="candidate-profession">Appointed Councilmember City of Pacific Grove</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kevin J. Hanley</div>
+<div class="candidate-profession">Retired Economics Instructor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacific Grove Member, City Council District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrew Kubica</div>
+<div class="candidate-profession">Retired Aerospace Engineer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Susan Goldbeck</div>
+<div class="candidate-profession">Community Volunteer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tara Leweling</div>
+<div class="candidate-profession">Business Owner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacific Grove Member, City Council District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Chris Thomas</div>
+<div class="candidate-profession">Retired General Manager</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Salinas Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Daniel Muñoz</div>
+<div class="candidate-profession">Artist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dennis Donohue</div>
+<div class="candidate-profession">City of Salinas Mayor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Hezekiah Gonzalez</div>
+<div class="candidate-profession">Student/Caregiver</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Peter Szalai</div>
+<div class="candidate-profession">Retired Educator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Salinas Member, City Council District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jose Guerra</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tony Barrera</div>
+<div class="candidate-profession">City of Salinas, Councilmember</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Salinas Member, City Council District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Brent Bagley</div>
+<div class="candidate-profession">Operations Consultant/Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Cary Swensen</div>
+<div class="candidate-profession">Business Owner/Educator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Margaret C. D&#x27;Arrigo</div>
+<div class="candidate-profession">City of Salinas, Councilmember</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Salinas Member, City Council District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrew Sandoval</div>
+<div class="candidate-profession">Councilmember/Educational Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Irma C. Lopez</div>
+<div class="candidate-profession">Board Trustee/Educator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Sand City Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mary Ann Carbone</div>
+<div class="candidate-profession">Mayor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Sand City Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Justin R. Rumps</div>
+<div class="candidate-profession">Federal Civil Servant</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Luke Kilpatrick</div>
+<div class="candidate-profession">Artist/Author/Innkeeper</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Seaside Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alex Miller</div>
+<div class="candidate-profession">Father/Councilman/Businessman</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ian N. Oglesby</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Seaside Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Annalisa &quot;Lisa&quot; Mitchell</div>
+<div class="candidate-profession">Regional Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dennis Volk</div>
+<div class="candidate-profession">Businessman</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Karla Lobo</div>
+<div class="candidate-profession">Mother</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kenneth Fittro</div>
+<div class="candidate-profession">Retired Education Specialist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lacey Raak</div>
+<div class="candidate-profession">Nonprofit Executive Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rita Burks</div>
+<div class="candidate-profession">Educator/Councilmember</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Soledad Member, City Council District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Don J Bolin</div>
+<div class="candidate-profession">Patient Care Navigator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Eugene Ivey</div>
+<div class="candidate-profession">Retired Peace Officer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Castroville Community Services District Director</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">J. Eric Tynan</div>
+<div class="candidate-profession">Water Manager</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Joel Ruiz</div>
+<div class="candidate-profession">Technical Operations Manager</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Juan Ramirez</div>
+<div class="candidate-profession">Delivery Driver</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Salinas Valley Memorial Healthcare System Director Zone 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Catherine Carson</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">James Dacus</div>
+<div class="candidate-profession">Physician</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Marina Coast Water District Director</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dalila Epperson</div>
+<div class="candidate-profession">Journalist/Mom</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gail Morton</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jan Shriner</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Matthew R Zefferman</div>
+<div class="candidate-profession">Scientist/University Educator</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    var input = document.getElementById('electionSearch');
+    var noResults = document.getElementById('noResults');
+    if (!input) return;
+    input.addEventListener('input', function() {
+      var q = this.value.trim().toLowerCase();
+      var container = input.closest('.lnm-results-widget') || document;
+      var boxes = container.querySelectorAll('.race-box');
+      var visible = 0;
+      boxes.forEach(function(box) {
+        var show = !q || box.textContent.toLowerCase().indexOf(q) !== -1;
+        box.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      noResults.style.display = (q && visible === 0) ? 'block' : 'none';
+    });
+  })();
+</script>

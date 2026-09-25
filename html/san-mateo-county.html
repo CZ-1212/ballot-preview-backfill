@@ -1,0 +1,2028 @@
+<style>
+    /* Scoped widget CSS -- this entire block is extracted verbatim for CMS embeds. */
+
+    .lnm-results-widget, .lnm-results-widget * { box-sizing: border-box; margin: 0; padding: 0; }
+    .lnm-results-widget { font-family: Arial, sans-serif; }
+
+    /* County banner */
+    .lnm-results-widget .lnm-county-banner {
+      background-color: #1a3668;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .lnm-results-widget .lnm-county-name {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .lnm-results-widget .lnm-election-title {
+      font-size: 13px;
+      font-weight: 400;
+      color: #accf00;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+
+    /* Race box */
+    .lnm-results-widget .race-box {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .lnm-results-widget .race-title {
+      background-color: #1a3668;
+      color: white;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-size: 1em;
+    }
+
+    /* Ballot measure */
+    .lnm-results-widget .measure-block {
+      padding: 16px;
+    }
+    .lnm-results-widget .measure-name {
+      font-size: 1.15em;
+      font-weight: 700;
+      color: #1a3668;
+      margin-bottom: 6px;
+    }
+    .lnm-results-widget .measure-desc {
+      font-size: 0.88em;
+      color: #555;
+      line-height: 1.55;
+    }
+
+    /* Candidate table header */
+    .lnm-results-widget .candidate-table-head {
+      padding: 6px 14px;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+    }
+    .lnm-results-widget .candidate-table-head span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    /* Candidate row */
+    .lnm-results-widget .candidate-row {
+      border-top: 1px solid #eee;
+      padding: 10px 14px;
+    }
+    .lnm-results-widget .candidate-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .lnm-results-widget .candidate-party {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      position: relative;
+      cursor: default;
+    }
+    .lnm-results-widget .candidate-party::after {
+      content: attr(data-party);
+      position: absolute;
+      bottom: calc(100% + 5px);
+      left: 0;
+      background: rgba(26,54,104,0.92);
+      color: white;
+      font-size: 11px;
+      font-weight: 400;
+      white-space: nowrap;
+      padding: 4px 9px;
+      border-radius: 4px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 20;
+    }
+    .lnm-results-widget .candidate-party:hover::after { opacity: 1; }
+    .lnm-results-widget .party-n { background: #e8e8e8; color: #555; }
+    .lnm-results-widget .candidate-name-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+    .lnm-results-widget .candidate-name {
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #333;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .lnm-results-widget .candidate-profession {
+      font-size: 0.78em;
+      color: #666;
+      margin-top: 2px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Search */
+    .lnm-results-widget .search-wrap {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .lnm-results-widget .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: white;
+      outline: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .lnm-results-widget .search-input:focus {
+      border-color: #1a3668;
+      box-shadow: 0 0 0 2px rgba(26,54,104,0.15);
+    }
+    .lnm-results-widget .no-results {
+      display: none;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      padding: 24px 0;
+    }
+  </style>
+<div class="lnm-results-widget">
+<div class="lnm-county-banner">
+<div class="lnm-county-name">San Mateo County</div>
+<div class="lnm-election-title">November 3, 2026 General Election</div>
+</div>
+<div class="search-wrap">
+<input class="search-input" id="electionSearch" placeholder="Search for measures, candidates, contests…" type="text">
+</div>
+<div class="no-results" id="noResults">No results found.</div>
+<div class="race-box">
+<div class="race-title">County of San Mateo</div>
+<div class="measure-block">
+<div class="measure-name">Measure L</div>
+<div class="measure-desc">Shall the San Mateo County Charter be amended to add a provision to the Charter Preamble designating long-term resilience to extreme weather events as a County priority?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">County of San Mateo</div>
+<div class="measure-block">
+<div class="measure-name">Measure AA</div>
+<div class="measure-desc">Shall the San Mateo County Charter be amended to add a provision to the Charter Preamble affirming the County’s commitment to the dignity, civil rights, and equal protection of all County residents?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">County of San Mateo</div>
+<div class="measure-block">
+<div class="measure-name">Measure J</div>
+<div class="measure-desc">Shall the San Mateo County Charter be amended to extend the period in which the County Board of Supervisors is required to either call a special election or make an appointment in the event of a vacancy in an elected office other than the Board of Supervisors from 30 days to 60 days, and to require the Board to conduct at least one public meeting to receive public comment prior to any appointment?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">County of San Mateo</div>
+<div class="measure-block">
+<div class="measure-name">Measure U</div>
+<div class="measure-desc">Shall the San Mateo County Charter be amended to require that supervisorial districts be reapportioned following each federal decennial census by an independent redistricting commission pursuant to applicable provisions of the California Elections Code?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Multicounty Jurisdiction</div>
+<div class="measure-block">
+<div class="measure-name">Measure RTM</div>
+<div class="measure-desc">Includes 5 Bay Area Counties: Alameda, Contra Costa, San Francisco, San Mateo, and Santa Clara. To prevent major service cuts to BART and other transit, avoid increased traffic, and reduce pollution by: Preserving BART, Caltrain, VTA, SamTrans, AC Transit, Muni, other transit for everyone, including workers, students, seniors, persons with disabilities; Supporting transit safety, cleanliness, affordability, reliability; Repairing targeted roads/potholes; Requiring financial transparency, oversight, accountability; shall the measure enacting a 0.5% (Alameda, Contra Costa, San Mateo, Santa Clara counties), and 1% (San Francisco) sales tax for 14 years generating approximately $980,000,000 annually, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Carlos School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure K</div>
+<div class="measure-desc">To protect outstanding educational programs, hands-on science, math, technology, arts, reading and writing, attract and retain high-quality teachers, maintain reasonable class sizes, and sustain property values, shall the San Carlos School District’s measure be adopted to replace its existing parcel tax at a $489 per parcel rate (raising approximately $4,400,000 annually) for 8 years, with annual cost-of-living adjustments, citizen oversight, senior exemptions, all funds spent locally and no funds used for administrator salaries?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Jefferson Union High School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure M</div>
+<div class="measure-desc">With funds that cannot be taken by the State or Federal Government and spent elsewhere, shall Jefferson Union High School District’s measure to directly support teachers and academic programs; expand / enhance career training and college preparedness classes; and hire and retain qualified teachers and counselors at Jefferson High School, Oceana High School, Shasta High School, Terra Nova High School, Thornton High School, and Westmoor High School be adopted, replacing the 2018 parcel tax at $98 per parcel for ten years (raising $3.4 million annually) with full public disclosure of all spending?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of East Palo Alto</div>
+<div class="measure-block">
+<div class="measure-name">Measure CC</div>
+<div class="measure-desc">Shall the measure providing that no person shall be eligible to serve for more than three (3) consecutive full terms on the City Council be adopted, with service of partial terms exceeding two years qualifying as a full term?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of East Palo Alto</div>
+<div class="measure-block">
+<div class="measure-name">Measure O</div>
+<div class="measure-desc">East Palo Alto Community/Water/Public Safety Infrastructure Measure. Shall the measure constructing a Library, Emergency Command Center, civic center, youth sports park; replacing deteriorating water pipes to provide safe/clean drinking water; repairing storm drains to prevent flooding; addressing earthquake safety, by authorizing East Palo Alto to issue $125,000,000 in general obligation bonds, with annual levies averaging $105.26 per $100,000 of assessed value (raising approximately $8,940,000 annually) while bonds are outstanding, with independent audits/public disclosure, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Carlos</div>
+<div class="measure-block">
+<div class="measure-name">Measure G</div>
+<div class="measure-desc">To provide funding for San Carlos city services, such as keeping local streets, sidewalks, storm drains, parks, and community facilities safe, clean, and well-maintained; fixing streets and potholes; relieving traffic congestion; repairing aging infrastructure; and supporting fire protection, paramedic, crime prevention, and 911 emergency response; shall City of San Carlos’ ordinance establishing a one-half cent sales tax be adopted, providing $6,000,000 annually for general government use for 14 years, with independent audits and all funds locally-controlled?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Menlo Park</div>
+<div class="measure-block">
+<div class="measure-name">Measure P</div>
+<div class="measure-desc">Should the measure, which prohibits the City of Menlo Park from making changes to City-owned downtown parking lot properties, including selling, leasing, or conveying any of the properties, authorizing a new use such as housing development on any of the properties, or modifying, altering, or constructing improvements on any of the properties, if such change would diminish parking availability, access or convenience, unless the voters pass another ballot measure to approve the change, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Redwood City</div>
+<div class="measure-block">
+<div class="measure-name">Measure E</div>
+<div class="measure-desc">Shall the measure repealing Redwood City Municipal Code Chapter 42 and replacing it with a new Chapter 42 that (1) limits rent increases on multifamily housing built before February 1, 1995; (2) expands just-cause eviction protections to most rental housing, including single-family homes, ADUs, and affordable housing; (3) requires new City administration estimated to cost $5 million to $11 million annually, funded by annual rental property owner fees; and (4) increases relocation assistance for no-fault evictions, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Brisbane</div>
+<div class="measure-block">
+<div class="measure-name">Measure X</div>
+<div class="measure-desc">Shall the measure updating the City&#x27;s Business License Tax by replacing the current tiered structure with a $50 tax for businesses with annual gross receipts of $25,000 or less and $50 plus $1.00 per $1,000 of gross receipts above $25,000 for most other businesses; establishing a minimum tax base equal to the cost of operations for businesses whose operating costs exceed gross receipts; and raising approximately $1,000,000 annually, until repealed by voters, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Burlingame School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure R</div>
+<div class="measure-desc">To repair aging Burlingame schools and maintain academic excellence by fixing leaky roofs; removing dry rot, lead/asbestos; replacing aging plumbing/electrical systems; updating science, technology/engineering labs; and providing teachers with instructional tools to support student success, shall Burlingame Elementary School District&#x27;s measure authorizing $100,000,000 in bonds at legal interest rates be adopted, at $16.00 per $100,000 of assessed value (approximately $6,567,830 annually) while bonds are outstanding, with oversight, audits, no funds for administrators, and local control?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Cabrillo Unified School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure Z</div>
+<div class="measure-desc">With funds that cannot be taken by the State or Federal Government and spent elsewhere, shall Cabrillo Unified School District&#x27;s measure to support local students by hiring and retaining highly qualified teachers and specialized educators; and expanding career training and college readiness programs, including agriculture, construction, and welding be adopted, replacing the current parcel tax at $239 per parcel for five years, (raising $2,600,000 annually) with senior exemptions, no administrator salaries or pensions, and public disclosure of spending?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Pacifica School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure T</div>
+<div class="measure-desc">To renew expiring local funding without increasing taxes, with local funding for elementary/middle schools the state cannot take away, to support strong math, science, history, reading/writing programs; attract/retain qualified teachers/counselors; maintain art/music/outdoor education programs, libraries and computer instruction, shall Pacifica School District&#x27;s measure be adopted, levying $118 per parcel, raising $1,300,000 annually for 10 years, with senior exemptions, independent oversight and no money for administrator salaries?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Burlingame</div>
+<div class="measure-block">
+<div class="measure-name">Measure D</div>
+<div class="measure-desc">To support city services such as: maintaining city streets/sidewalks and repairing potholes; maintaining parks and trees; enhancing emergency response, preparedness, and wildfire prevention; and for general government use; shall the City of Burlingame measure be adopted raising the transient occupancy (hotel) tax from 12% to 15%, paid only by hotel and lodging guests, until ended by voters, providing an estimated $5,700,000 annually, all funds locally controlled, with independent citizen oversight?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Town of Portola Valley</div>
+<div class="measure-block">
+<div class="measure-name">Measure N</div>
+<div class="measure-desc">Town of Portola Valley Autonomy Measure. Shall the measure maintaining Portola Valley’s independent status be adopted, providing: wildfire prevention/vegetation management; 911 emergency response/police patrols; local zoning/planning services; storm drain repair; and general government services; by adopting a charter for the Town of Portola Valley solely for, and establishing a real property transfer tax of $10 per $1,000, paid by buyers or sellers of property, until ended by voters, providing approximately $2,000,000 in locally controlled funding annually, with independent oversight?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Mateo</div>
+<div class="measure-block">
+<div class="measure-name">Measure F</div>
+<div class="measure-desc">Shall the measure amending the City of San Mateo’s Charter to reflect the City’s current district-based election system, update the process for scheduling Council meetings and filling Council vacancies, update or remove obsolete provisions, and make other technical and conforming changes, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Mateo</div>
+<div class="measure-block">
+<div class="measure-name">Measure H</div>
+<div class="measure-desc">To provide funding for San Mateo city services, such as keeping local streets, sidewalks, parks, infrastructure, and community facilities safe, clean, and well-maintained, fixing potholes, providing fire protection, paramedic, crime prevention, and 9-1-1 emergency response, and improvements to traffic safety/traffic management, shall the City of San Mateo’s ordinance establishing a one-quarter cent sales tax be adopted, providing 7 million dollars annually for general government use until ended by voters, with independent audits and all funds locally-controlled?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Bruno</div>
+<div class="measure-block">
+<div class="measure-name">Measure S</div>
+<div class="measure-desc">Shall City of San Bruno Ordinance No. 1284, the 1977 zoning initiative that requires voter approval before the City Council can approve buildings exceeding specified height limits, residential density increases beyond 1974 zoning, multi-story parking structures, and certain roadway changes, be repealed given that State housing laws supersede local height limits and the ordinance interacts with current City economic development goals?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Bruno</div>
+<div class="measure-block">
+<div class="measure-name">Measure DD</div>
+<div class="measure-desc">Shall the City of San Bruno Safe and Sane Fireworks Ordinance be repealed to prohibit the sale, use, and discharge of safe and sane fireworks in the City of San Bruno?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Bruno</div>
+<div class="measure-block">
+<div class="measure-name">Measure EE</div>
+<div class="measure-desc">San Bruno Essential Services Protection Measure. To protect essential services such as: fixing potholes/city streets; providing rapid response to 9-1-1 emergency calls; maintaining library programs for children, teens, adults/seniors; maintaining parks/open space; and general city services, shall the measure be adopted simplifying/modernizing San Bruno’s business license ordinance, making rates more equitable/equal, updating the tax rate schedule as described in the ordinance, until ended by voters, raising $4,000,000 annually, with annual independent audits?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Mateo-Foster City School District</div>
+<div class="measure-block">
+<div class="measure-name">Measure W</div>
+<div class="measure-desc">To improve elementary and middle school classrooms for skilled trades, science, technology, engineering, and math; replace leaky roofs, old windows, fire alarms and emergency communications systems; provide affordable housing to attract/retain quality teachers/staff; acquire, construct, repair facilities, equipment, sites; shall San Mateo-Foster City School District’s measure be adopted, authorizing $498,000,000 in bonds at legal interest rates, levying $29 per $100,000 assessed value, averaging $35,000,000 annually while bonds are outstanding, with audits, independent oversight, and funds used locally?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Mateo County Community College District</div>
+<div class="measure-block">
+<div class="measure-name">Measure V</div>
+<div class="measure-desc">Without increasing current tax rates and to protect affordable higher education at College of San Mateo, Cañada College, and Skyline College by repairing/constructing science, engineering, math, technology, skilled trades, and career-training classrooms that prepare students for in-demand careers; and repairing roofs, plumbing, electrical, shall San Mateo County Community College District’s measure authorizing $848,000,000 in bonds at legal rates be adopted, levying approximately $18 per $100,000 assessed value ($75,000,000 annually) while bonds are outstanding, with independent audits, oversight, and all money locally controlled?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Belmont</div>
+<div class="measure-block">
+<div class="measure-name">Measure Y</div>
+<div class="measure-desc">City of Belmont Community Center Tax Measure. Shall the ordinance providing funding for and maintaining supervised children&#x27;s play, youth, teen and adult programs, childcare, afterschool and senior programs in a disabled accessible, fire and earthquake resistant community center, usable as an emergency health and disaster relief facility, levying 33¢ per square foot of residential improvements and 54¢ per square foot of nonresidential improvements, providing $7,100,000 annually until ended by voters, with senior exemptions and independent audits, increasing the appropriation limit, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Half Moon Bay</div>
+<div class="measure-block">
+<div class="measure-name">Measure I</div>
+<div class="measure-desc">Shall the Measure, amending the City of Half Moon Bay Local Coastal Land Use Plan, Title 17 (Subdivisions) and Title 18 (Zoning) of the Half Moon Bay Municipal Code, and other conforming edits so that the Measure D “Downtown Area” is redefined as the area designated as the “Town Center” (Figure 2-2) of the Local Coastal Land Use Plan, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Half Moon Bay</div>
+<div class="measure-block">
+<div class="measure-name">Measure Q</div>
+<div class="measure-desc">Shall Ordinance No. 2026-01, approving agreements with Mercy Housing California 110, L.P. (including a Ground Lease of Real Property for 99 years at a rate of $1/year, which is customary, and Affordable Housing and Property Disposition Agreement) providing for the development/operation of a Senior Affordable 40-Unit Residential Project for Agricultural Workers, which includes 2,653-square foot Community Space, at 535-555 Kelly Avenue in the City of Half Moon Bay, and authorizing other related actions, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacifica</div>
+<div class="measure-block">
+<div class="measure-name">Measure BB</div>
+<div class="measure-desc">Pacifica City Services Measure. To protect Pacifica’s long-term financial stability; fund police, fire, 911 emergency response; prioritize paving streets in the worst conditions; keep parks, beaches and public spaces safe and maintained; and for general government use, shall the City of Pacifica’s measure establishing a 1% (1¢) transactions and use (sales) tax, generating approximately $5,000,000 annually until ended by voters, with public disclosure and local control of funds, and independent annual audits, be adopted?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">County Board of Education Member, Trustee Area 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Beverly Gerard</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dana Johnson</div>
+<div class="candidate-profession">Program Director / Commissioner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Mateo County Community College District Member, Governing Board, Trustee Area 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mike Guingona</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jason Holt</div>
+<div class="candidate-profession">Software Engineer / Parent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Cabrillo Unified School District Member, Governing Board, Trustee Area C</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Peter Tokofsky</div>
+<div class="candidate-profession">Teacher / Dad / Journalist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lizet Cortes-Ronquillo</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Cabrillo Unified School District Member, Governing Board, Trustee Area E</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mary Beth Alexander</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrea Rosenthal</div>
+<div class="candidate-profession">Teacher / Parent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">South San Francisco Unified School District Member, Governing Board, Trustee Area C</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Chialin Hsieh</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Avin Sharma</div>
+<div class="candidate-profession">Parent / Finance Administrator</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">South San Francisco Unified School District Member, Governing Board, Trustee Area E</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Frank Lara</div>
+<div class="candidate-profession">Teacher / Union Leader</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mina A. Richardson</div>
+<div class="candidate-profession">SSFUSD Trustee</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Mateo Union High School District Member, Governing Board, Trustee Area 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Diana Harris</div>
+<div class="candidate-profession">Teacher / Mother</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jennifer Jacobson</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Mateo Union High School District Member, Governing Board, Trustee Area 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kimo Rosenbaum</div>
+<div class="candidate-profession">Parent / Software Engineer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alison Proctor</div>
+<div class="candidate-profession">San Mateo-Foster City School District Trustee</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Sequoia Union High School District Member, Governing Board, Trustee Area A</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Amy Koo</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alon Shiran</div>
+<div class="candidate-profession">Product Executive / Parent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Sequoia Union High School District Member, Governing Board, Trustee Area D</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Michael Dekshenieks</div>
+<div class="candidate-profession">Management Executive / Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sathvik Nori</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Brisbane School District Member, Governing Board</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Charlene Larson</div>
+<div class="candidate-profession">Retired Federal Employee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Morgan Finlay</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Emily Wirowek</div>
+<div class="candidate-profession">Parent / Attorney</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sarah Duffy</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Menlo Park City School District Member, Governing Board</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jed Scolnick</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Maya Herstein</div>
+<div class="candidate-profession">Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sherwin Chen</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrew Barnes</div>
+<div class="candidate-profession">County of Santa Clara Facilities Professional</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Pacifica School District Member, Governing Board (Full Term)</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Bridget Hardt</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rachel Durkin</div>
+<div class="candidate-profession">Realtor / Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Grace Sobieski</div>
+<div class="candidate-profession">Parent / Educator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tiffany Button</div>
+<div class="candidate-profession">Quality Director / Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Christopher Swiedler</div>
+<div class="candidate-profession">Parent / Software Engineer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Katy Bradley</div>
+<div class="candidate-profession">Union Organizer / Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Laverne R Villalobos</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Pacifica School District Member, Governing Board (Short Term)</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kelly Mendoza</div>
+<div class="candidate-profession">Education Programs Leader</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tracey Simmons</div>
+<div class="candidate-profession">Artist / Biologist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Elizabeth A. Bredall</div>
+<div class="candidate-profession">Special Education Paraprofessional</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">San Carlos School District Member, Governing Board</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Boris Lipkin</div>
+<div class="candidate-profession">Appointed San Carlos School District Member, Governing Board</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Richard F. Wahl</div>
+<div class="candidate-profession">Optician / Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Megha Chawla</div>
+<div class="candidate-profession">Tech Executive / Mother</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Shivani Tripathi</div>
+<div class="candidate-profession">Community Volunteer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Member, Board of Supervisors, District 5 (Short Term)</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mark Nagales</div>
+<div class="candidate-profession">Vice Mayor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Juslyn Cabrera Manalo</div>
+<div class="candidate-profession">Daly City Councilmember</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Belmont Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Julia Mates</div>
+<div class="candidate-profession">Mayor of Belmont</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Belmont Member, City Council, District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gina Latimerlo</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Belmont Member, City Council, District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sarah K.M. Delisle</div>
+<div class="candidate-profession">Mother / Business Owner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Brisbane Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Julie Sims</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Charles Spencer</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Madison Davis</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Chaya-Bella David</div>
+<div class="candidate-profession">Community Volunteer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Christopher Hornick</div>
+<div class="candidate-profession">Businessman / Entrepreneur</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Burlingame Member, City Council, District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Andrea Pappajohn</div>
+<div class="candidate-profession">Burlingame Vice Mayor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Burlingame Member, City Council, District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jen Faber</div>
+<div class="candidate-profession">Education Foundation Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Howard Wettan</div>
+<div class="candidate-profession">City Commissioner / Attorney</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Burlingame Member, City Council, District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Peter W. Stevenson</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Town of Colma Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Helen Fisicaro</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Laura M Walsh</div>
+<div class="candidate-profession">Medical Assistant</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Joanne F. Del Rosario</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Elisabeth Aurora Jenson</div>
+<div class="candidate-profession">Entrepreneur / Artist</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Daly City Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Thomas A. Nuris</div>
+<div class="candidate-profession">Attorney</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Pamela Digiovanni</div>
+<div class="candidate-profession">Daly City Councilmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Teresa Proaño</div>
+<div class="candidate-profession">City Councilmember / Businesswoman</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tony Bayudan</div>
+<div class="candidate-profession">Chief of Staff</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rod Daus-Magbual</div>
+<div class="candidate-profession">Councilman / Professor / Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Asia Su</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Barry Rodriguez</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of East Palo Alto Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Holifa Windom</div>
+<div class="candidate-profession">Businesswoman</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gail Wilk Dixon</div>
+<div class="candidate-profession">Legal Investigator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ruben Abrica</div>
+<div class="candidate-profession">Substitute Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sam Jimenez</div>
+<div class="candidate-profession">Plumbing Business Owner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ofelia Bello</div>
+<div class="candidate-profession">Nonprofit Executive Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Deborah Lewis-Virges</div>
+<div class="candidate-profession">Pastor / Community Advocate</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Michael Mashack</div>
+<div class="candidate-profession">Planning Commissioner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Foster City Member, City Council, District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Art Kiesel</div>
+<div class="candidate-profession">Mayor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Phoebe Shin Venkat</div>
+<div class="candidate-profession">Nonprofit Executive / Councilmember</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Foster City Member, City Council, District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Stacy Jimenez</div>
+<div class="candidate-profession">Councilmember / Attorney</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Half Moon Bay Member, City Council, District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robert Brownstone</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Gorn</div>
+<div class="candidate-profession">Planning Commissioner Chair</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Half Moon Bay Member, City Council, District 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ron Kies</div>
+<div class="candidate-profession">Geologist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Debbie Ruddock</div>
+<div class="candidate-profession">Retired Legislative Analyst</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Half Moon Bay Member, City Council, District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Susie Morasci</div>
+<div class="candidate-profession">Paralegal</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Steven R. Booker</div>
+<div class="candidate-profession">Electrician</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Menlo Park Member, City Council, District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">James Rohr</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Wonman Lee</div>
+<div class="candidate-profession">Software Engineer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Menlo Park Member, City Council, District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Drew Combs</div>
+<div class="candidate-profession">Menlo Park City Councilmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Vamsi Velagapudi</div>
+<div class="candidate-profession">Community Volunteer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Menlo Park Member, City Council, District 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Charlotte Reed</div>
+<div class="candidate-profession">Communications Professional / Singer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Laura Melahn</div>
+<div class="candidate-profession">Entrepreneur / Nonprofit Director</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Millbrae Member, City Council, District 2 (Full Term)</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sissy Riley</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Millbrae Member, City Council, District 3 (Short Term)</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Juan Gámez</div>
+<div class="candidate-profession">Business Consultant / Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ann Schneider</div>
+<div class="candidate-profession">Community Volunteer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Millbrae Member, City Council, District 4 (Full Term)</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Albert Yam</div>
+<div class="candidate-profession">University Data Analyst</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Bob Nguyen</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacifica Member, City Council, District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Christine Boles</div>
+<div class="candidate-profession">Architect / Businesswoman / Councilmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dan Urban</div>
+<div class="candidate-profession">Retired Regional Director</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacifica Member, City Council, District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Cindy Abbott</div>
+<div class="candidate-profession">Nonprofit Director</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Pacifica Member, City Council, District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Margo Meiman</div>
+<div class="candidate-profession">Retired Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sam Casillas</div>
+<div class="candidate-profession">Climate Resiliency Manager</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Town of Portola Valley Member, Town Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mary Hufty</div>
+<div class="candidate-profession">Portola Valley Vice Mayor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Craig S Taylor</div>
+<div class="candidate-profession">Town Council Member</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Judith A. Hasko</div>
+<div class="candidate-profession">Town Council Member</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Redwood City Member, City Council, District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Chris Sturken</div>
+<div class="candidate-profession">City Council Member</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Redwood City Member, City Council, District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kaia Eakin</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of Redwood City Member, City Council, District 6</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Diane Howard</div>
+<div class="candidate-profession">City Councilmember / Nurse</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Bruno Mayor</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rico E. Medina</div>
+<div class="candidate-profession">Mayor, City of San Bruno</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Bruno Member, City Council, District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jennifer M. Blanco</div>
+<div class="candidate-profession">Juvenile Justice Commissioner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kingsley Ma</div>
+<div class="candidate-profession">School Board President</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Bruno Member, City Council, District 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Marty P. Medina</div>
+<div class="candidate-profession">San Bruno City Councilmember District 4</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Auros Harman</div>
+<div class="candidate-profession">Planning Commissioner / Engineer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Carlos Member, City Council</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Pranita Venkatesh</div>
+<div class="candidate-profession">Councilmember / Educator</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sara Mcdowell</div>
+<div class="candidate-profession">City Councilmember / Mother</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Adam Rak</div>
+<div class="candidate-profession">San Carlos City Councilmember</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mark D. Iwanowski</div>
+<div class="candidate-profession">Business Owner / Entrepreneur</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Mateo Member, City Council, District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Taso Zografos</div>
+<div class="candidate-profession">Business Executive / Engineer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lisa Diaz Nash</div>
+<div class="candidate-profession">San Mateo Councilmember, District 1</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Mateo Member, City Council, District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Seema Patel</div>
+<div class="candidate-profession">Planning Commissioner</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robert G. Newsom Jr.</div>
+<div class="candidate-profession">Councilmember / Businessman / Father</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of San Mateo Member, City Council, District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dave Johnson</div>
+<div class="candidate-profession">Pastor / Coach</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Dana Yates Sahae</div>
+<div class="candidate-profession">Community Advocate / Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Adam Loraine</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of South San Francisco Member, City Council, District 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Aysha Dominguez Pamukcu</div>
+<div class="candidate-profession">Policy Fund Director</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of South San Francisco Member, City Council, District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Buenaflor (Flor) Nicolas</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sophia Cyris</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Melanie Olson</div>
+<div class="candidate-profession">Associate Planner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of South San Francisco Member, City Council, District 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Eddie Flores</div>
+<div class="candidate-profession">South San Francisco Councilmember, District 5</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of South San Francisco City Clerk</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rosa Govea Acosta</div>
+<div class="candidate-profession">City Clerk</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of South San Francisco City Treasurer</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Frank Risso</div>
+<div class="candidate-profession">City Treasurer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Town of Woodside Member, Town Council, District 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Lyle Weaver</div>
+<div class="candidate-profession">Retired Engineer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Town of Woodside Member, Town Council, District 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Daniel Druker</div>
+<div class="candidate-profession">Retired Technology Executive</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Coastside County Water District Member, Board of Directors, Zone 5</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Nancy Eleanora Poss</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Joey P. Silva</div>
+<div class="candidate-profession">Retired Maintenance Supervisor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Coastside Fire Protection District Member, Board of Directors, District D</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Ryan Mcgraw</div>
+<div class="candidate-profession">Deputy Fire Marshal</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Cynthia Sherrill</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Coastside Fire Protection District Member, Board of Directors, District E</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gary Burke</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Alex Carrillo</div>
+<div class="candidate-profession">Crisis Management Professional</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Granada Community Services District Member, Board of Directors</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Barbara Dye</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kevin W. Sniecinski</div>
+<div class="candidate-profession">Researcher / Community Advocate</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Matt Allen</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Patrick Tierney</div>
+<div class="candidate-profession">Retired Professor</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    var input = document.getElementById('electionSearch');
+    var noResults = document.getElementById('noResults');
+    if (!input) return;
+    input.addEventListener('input', function() {
+      var q = this.value.trim().toLowerCase();
+      var container = input.closest('.lnm-results-widget') || document;
+      var boxes = container.querySelectorAll('.race-box');
+      var visible = 0;
+      boxes.forEach(function(box) {
+        var show = !q || box.textContent.toLowerCase().indexOf(q) !== -1;
+        box.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      noResults.style.display = (q && visible === 0) ? 'block' : 'none';
+    });
+  })();
+</script>

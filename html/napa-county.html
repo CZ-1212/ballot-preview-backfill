@@ -1,0 +1,688 @@
+<style>
+    /* Scoped widget CSS -- this entire block is extracted verbatim for CMS embeds. */
+
+    .lnm-results-widget, .lnm-results-widget * { box-sizing: border-box; margin: 0; padding: 0; }
+    .lnm-results-widget { font-family: Arial, sans-serif; }
+
+    /* County banner */
+    .lnm-results-widget .lnm-county-banner {
+      background-color: #1a3668;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .lnm-results-widget .lnm-county-name {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .lnm-results-widget .lnm-election-title {
+      font-size: 13px;
+      font-weight: 400;
+      color: #accf00;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+
+    /* Race box */
+    .lnm-results-widget .race-box {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .lnm-results-widget .race-title {
+      background-color: #1a3668;
+      color: white;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-size: 1em;
+    }
+
+    /* Ballot measure */
+    .lnm-results-widget .measure-block {
+      padding: 16px;
+    }
+    .lnm-results-widget .measure-name {
+      font-size: 1.15em;
+      font-weight: 700;
+      color: #1a3668;
+      margin-bottom: 6px;
+    }
+    .lnm-results-widget .measure-desc {
+      font-size: 0.88em;
+      color: #555;
+      line-height: 1.55;
+    }
+
+    /* Candidate table header */
+    .lnm-results-widget .candidate-table-head {
+      padding: 6px 14px;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+    }
+    .lnm-results-widget .candidate-table-head span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    /* Candidate row */
+    .lnm-results-widget .candidate-row {
+      border-top: 1px solid #eee;
+      padding: 10px 14px;
+    }
+    .lnm-results-widget .candidate-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .lnm-results-widget .candidate-party {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      position: relative;
+      cursor: default;
+    }
+    .lnm-results-widget .candidate-party::after {
+      content: attr(data-party);
+      position: absolute;
+      bottom: calc(100% + 5px);
+      left: 0;
+      background: rgba(26,54,104,0.92);
+      color: white;
+      font-size: 11px;
+      font-weight: 400;
+      white-space: nowrap;
+      padding: 4px 9px;
+      border-radius: 4px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 20;
+    }
+    .lnm-results-widget .candidate-party:hover::after { opacity: 1; }
+    .lnm-results-widget .party-n { background: #e8e8e8; color: #555; }
+    .lnm-results-widget .candidate-name-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+    .lnm-results-widget .candidate-name {
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #333;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .lnm-results-widget .candidate-profession {
+      font-size: 0.78em;
+      color: #666;
+      margin-top: 2px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Search */
+    .lnm-results-widget .search-wrap {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .lnm-results-widget .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: white;
+      outline: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .lnm-results-widget .search-input:focus {
+      border-color: #1a3668;
+      box-shadow: 0 0 0 2px rgba(26,54,104,0.15);
+    }
+    .lnm-results-widget .no-results {
+      display: none;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      padding: 24px 0;
+    }
+  </style>
+<div class="lnm-results-widget">
+<div class="lnm-county-banner">
+<div class="lnm-county-name">Napa County</div>
+<div class="lnm-election-title">November 3, 2026 General Election</div>
+</div>
+<div class="search-wrap">
+<input class="search-input" id="electionSearch" placeholder="Search for measures, candidates, contests…" type="text">
+</div>
+<div class="no-results" id="noResults">No results found.</div>
+<div class="race-box">
+<div class="race-title">County of Napa</div>
+<div class="measure-block">
+<div class="measure-name">Measure B</div>
+<div class="measure-desc">AN INITIATIVE IMPOSING A ONE-HALF PERCENT (1/2%) SALES TAX FOR WILDFIRE PREPAREDNESS, WATERSHED PROTECTION, AND OPEN SPACE PRESERVATION
+
+SUMMARY: This initiative, entitled the “Napa County Wildfire Preparedness, Watershed Protection and Open Space Preservation Act of 2026” would add a new Chapter 3.38 to Title 3 of the Napa County Code.
+
+The Initiative, if enacted, would do all of the following:
+1) Impose a countywide retail transaction and use tax (“sales tax”) at the rate of one-half of one percent (1/2%), on the sale and use of tangible personal property within Napa County, including both the incorporated and unincorporated areas of the county. The sales tax would be imposed for eighteen (18) years, beginning on April 1, 2027 and expiring on March 31, 2045.
+2) Limit the use of, and require that sales tax proceeds be used for, the specific purposes identified in the Initiative’s Expenditure Plan, which includes wildfire preparedness, watershed protection, open space preservation, and administrative expenditures related to the planning and implementation of the Initiative. The Expenditure Plan outlines the specific program expenditure categories. The Expenditure Plan would be codified as Section 3.38.040 of the Napa County Code and would guide how the proceeds will be used.
+3) Require the County Auditor-Controller to establish a special fund for the deposit of sales tax proceeds and mandate allocation of 50% of sales tax proceeds to Napa County and 50% of the sales tax proceeds to the Napa County Regional Park and Open Space District (“Park District”).
+4) Require the County and the Park District to distribute the sales tax proceeds to grantees through a competitive grant process, as further described in the Initiative, to be used only for the purposes outlined in the Expenditure Plan. The County may award grants only to 501c3 nonprofit organizations, with exceptions as outlined in the Initiative. The Parks District may grant awards to 501c3 nonprofit corporations and public agencies as described in the Initiative.
+5) Establish an Oversight Committee tasked with reviewing the receipt and expenditure of sales tax proceeds, including an annual report of each grantee’s use of funds. The Committee will consist of nine Napa County resident members and 3 non-voting ex-officio members: County Auditor, Park District General Manager, and County Fire Administrator, or their respective designees.
+6) Increase the appropriations limit for the County by four years, to allow the use of all raised sales tax proceeds.</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of American Canyon</div>
+<div class="measure-block">
+<div class="measure-name">Measure P</div>
+<div class="measure-desc">To help fund key City services and community priorities, the City Council voted on June 16 to place Measure P, a City Services Sales Tax Measure, on the ballot for the November 3, 2026 election. This measure will give American Canyon residents a chance to vote on the proposed 1% sales tax increase that is estimated to secure approximately $3.7 million for the City. Currently, American Canyon&#x27;s sales tax rate is 7.75%, which is one of the lowest amongst its closest neighboring cities. The proposed 1% sales tax would bring the local rate to 8.75%, aligning it with the City of Napa&#x27;s rate. All revenue generated by Measure P is legally required to remain within the American Canyon community.</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City of St Helena</div>
+<div class="measure-block">
+<div class="measure-name">Measure S</div>
+<div class="measure-desc">St. Helena City Services Measure
+
+To maintain/improve St. Helena’s long-term finances and maintain 911 fire/public safety response, St. Helena’s infrastructure including repairing roads/potholes/sidewalks; reducing local wildfire risk by managing brush/other fuels; maintain parks; supporting local businesses; for other general city services; shall the measure be adopted establishing a ½¢ locally controlled sales tax, generating approximately $2,000,000 annually until ended by voters, requiring independent audits, public spending disclosure, all funds benefiting St. Helena residents?</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Town of Yountville</div>
+<div class="measure-block">
+<div class="measure-name">Measure Y</div>
+<div class="measure-desc">Proposed Ballot Measure – Increase in Appropriations (GANN) Limit
+
+To fully utilize TOT and sales tax generated from visitors for public services, parks and recreation, police, and fire emergency programs, shall the appropriations limit set by Article 13B of the California Constitution be increased by $3,000,000 plus 1/4 of TOT revenues for the prior fiscal year, for each year for a four year period commencing FY 2027/2028? By approving this appropriation limit, no existing tax is increased, and no new taxes are created.</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Napa Valley College Trustee Area No. 2</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jeff Dodd</div>
+<div class="candidate-profession">Napa Valley College Trustee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Heriverto Ruiz</div>
+<div class="candidate-profession">School Counselor</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Napa Valley College Trustee Area No. 3</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Emily Pastula</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Elizabeth L Goff</div>
+<div class="candidate-profession">Retired Teacher</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Karina Servente</div>
+<div class="candidate-profession">Community Parent Liaison</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Napa Valley College Trustee Area No. 4</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Cindy Johnson</div>
+<div class="candidate-profession">High School Counselor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">William &quot;Kyle&quot; Iverson</div>
+<div class="candidate-profession">Napa Valley College Trustee Dist. 4</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Napa Valley Unified School District Trustee Area No. 1</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robin Jankiewicz</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Matthew Mcmann</div>
+<div class="candidate-profession">Small Business Owner</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Napa Valley Unified School District Trustee Area No. 6</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Elba Gonzalez-Mares</div>
+<div class="candidate-profession">Executive Director</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Tyrone Navarro</div>
+<div class="candidate-profession">Retired Public Manager</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Napa Valley Unified School District Trustee Area No. 7</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Hildebrandt</div>
+<div class="candidate-profession">Higher Education Professor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jason M. Dooley</div>
+<div class="candidate-profession">Attorney</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">John Houser</div>
+<div class="candidate-profession">Recreation Specialist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Gabriel Champagne Affonso</div>
+<div class="candidate-profession">Community Volunteer</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Calistoga Joint Unified School District Governing Board Member</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Cecilia Ramirez</div>
+<div class="candidate-profession">Hairdresser/Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Laurel Rios</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Irene Pena</div>
+<div class="candidate-profession">School Psychologist</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Rebecca Sager</div>
+<div class="candidate-profession">Teacher</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City Council City of American Canyon</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jason Kishineff</div>
+<div class="candidate-profession">Napa Valley College Board Trustee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Sindy Biederman</div>
+<div class="candidate-profession">Napa County Office Of Education Board Trustee</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robert Cole</div>
+<div class="candidate-profession">Non-Profit Organization President</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jim Giron</div>
+<div class="candidate-profession">Retired IT Executive</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">David Oro</div>
+<div class="candidate-profession">Business Owner/Councilmember</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City Council District 1 City of Napa</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Christopher Denatale</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City Council District 3 City of Napa</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Mary Luros</div>
+<div class="candidate-profession">Councilmember/Attorney/Mom</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jim Hinton</div>
+<div class="candidate-profession">Caregiver</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Mayor City of St Helena</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Bonnie Schoch</div>
+<div class="candidate-profession">Accountant</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Patrick Kenealy</div>
+<div class="candidate-profession">Venture Capitalist</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">City Council City of St Helena</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Kate Spadarotto</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Joshua Parke</div>
+<div class="candidate-profession">Business Owner/Parent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Daniel Hale</div>
+<div class="candidate-profession">Designer</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">John Pedersen</div>
+<div class="candidate-profession">Father</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Scott Diaz</div>
+<div class="candidate-profession">Appointed Incumbent</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Mayor Town of Yountville</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Marjorie Mohler</div>
+<div class="candidate-profession">Mayor</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Joe Tagliaboschi</div>
+<div class="candidate-profession">City Manager</div>
+</div>
+</div>
+</div>
+</div>
+<div class="race-box">
+<div class="race-title">Member of Town Council Town of Yountville</div>
+<div class="candidate-table-head">
+<span>Candidate</span>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Robin Mckee</div>
+<div class="candidate-profession">Incumbent</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jessi Bugden</div>
+<div class="candidate-profession">NA</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Matthew Chrzanowski</div>
+<div class="candidate-profession">Winegrower</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Hillery Bolt Trippe</div>
+<div class="candidate-profession">Retired Attorney</div>
+</div>
+</div>
+</div>
+<div class="candidate-row">
+<div class="candidate-name-cell">
+<div class="candidate-party party-n" data-party="Non-Partisan">N</div>
+<div class="candidate-name-text">
+<div class="candidate-name">Jill Turner</div>
+<div class="candidate-profession">Businessperson</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    var input = document.getElementById('electionSearch');
+    var noResults = document.getElementById('noResults');
+    if (!input) return;
+    input.addEventListener('input', function() {
+      var q = this.value.trim().toLowerCase();
+      var container = input.closest('.lnm-results-widget') || document;
+      var boxes = container.querySelectorAll('.race-box');
+      var visible = 0;
+      boxes.forEach(function(box) {
+        var show = !q || box.textContent.toLowerCase().indexOf(q) !== -1;
+        box.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      noResults.style.display = (q && visible === 0) ? 'block' : 'none';
+    });
+  })();
+</script>
