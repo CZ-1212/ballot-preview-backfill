@@ -2,7 +2,7 @@
 """Render per-county ballot-preview HTML widgets from the backfill workbook.
 
 Usage:
-    python3 scripts/render_preview.py <workbook.xlsx> [--county "Alameda County"] [--out html/]
+    python3 scripts/render_preview.py <workbook.xlsx> [--county "Alameda County"] [--out html/] [--theme blue]
 
 Each output file is a self-contained CMS embed: scoped <style>, the
 .lnm-results-widget markup, and the search <script>. No live-election
@@ -14,16 +14,14 @@ import openpyxl
 ELECTION_TITLE = "November 3, 2026 General Election"
 
 # Color themes: primary (banners, headers) and accent (election title).
+# "default" is the navy/green newsroom; "blue" is the blue/orange newsroom.
 THEMES = {
-    "default":   {"primary": "#1a3668", "accent": "#accf00"},
-    "mendocino": {"primary": "#1e7ec4", "accent": "#ff8c1a"},
-}
-COUNTY_THEMES = {
-    "Mendocino County": "mendocino",
+    "default": {"primary": "#1a3668", "accent": "#accf00"},
+    "blue":    {"primary": "#1e7ec4", "accent": "#ff8c1a"},
 }
 
-def theme_css(county):
-    t = THEMES[COUNTY_THEMES.get(county, "default")]
+def theme_css(theme):
+    t = THEMES[theme]
     h = t["primary"].lstrip("#")
     rgb = ",".join(str(int(h[i:i+2], 16)) for i in (0, 2, 4))
     return CSS.format(primary=t["primary"], accent=t["accent"], primary_rgb=rgb)
@@ -274,11 +272,11 @@ def render_race(race, cands):
     parts.append('</div>\n')
     return "".join(parts)
 
-def render_county(county, measures, candidates):
+def render_county(county, measures, candidates, theme="default"):
     races = collections.OrderedDict()
     for c in candidates:
         races.setdefault((c.get("Race") or "").strip(), []).append(c)
-    body = [theme_css(county),
+    body = [theme_css(theme),
             '<div class="lnm-results-widget">\n',
             '<div class="lnm-county-banner">\n',
             f'<div class="lnm-county-name">{esc(county)}</div>\n',
@@ -299,6 +297,8 @@ def main():
     ap.add_argument("workbook")
     ap.add_argument("--county", action="append", help="render only this county (repeatable)")
     ap.add_argument("--out", default="html")
+    ap.add_argument("--theme", default="default", choices=sorted(THEMES),
+                    help="color theme; non-default themes get a '-<theme>' filename suffix")
     a = ap.parse_args()
     measures, candidates = load(a.workbook)
     counties = list(dict.fromkeys([m["County"] for m in measures] + [c["County"] for c in candidates]))
@@ -308,9 +308,10 @@ def main():
     for county in counties:
         ms = [m for m in measures if m["County"] == county]
         cs = [c for c in candidates if c["County"] == county]
-        path = os.path.join(a.out, f"{slug(county)}.html")
+        suffix = "" if a.theme == "default" else f"-{a.theme}"
+        path = os.path.join(a.out, f"{slug(county)}{suffix}.html")
         with open(path, "w", encoding="utf-8") as f:
-            f.write(render_county(county, ms, cs))
+            f.write(render_county(county, ms, cs, a.theme))
         races = len({c["Race"] for c in cs})
         print(f"{path}: {len(ms)} measures, {races} races, {len(cs)} candidates")
 
